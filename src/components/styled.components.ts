@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const flexDiv = styled.div`
+    display: flex;
+`
+
 export const LoginButton = styled.button`
    padding: 10px;
    border-radius: 3px;
@@ -9,4 +13,8 @@ export const LoginButton = styled.button`
    color: #ffffff;
    border: none;
    width: 100%;
+   cursor: pointer;
+   &:hover {
+      background-color: #e0e0e0;
+   }
 `;
