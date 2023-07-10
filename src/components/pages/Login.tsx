@@ -1,9 +1,9 @@
+import { LoginButton } from '../styled.components';
+
 export const Login: React.FC = () => {
-
-
    return (
       <div>
-         <button>Login</button>
+         <LoginButton>Login</LoginButton>
       </div>
    );
 };

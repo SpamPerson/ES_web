@@ -1,3 +1,3 @@
-export const Home:React.FC = () => {
-    return <div>Home</div>
-}
+export const Home: React.FC = () => {
+   return <div>Home</div>;
+};
