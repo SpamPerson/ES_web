@@ -1,9 +1,5 @@
-import { LoginButton } from '../styled.components';
+import { Stack } from '../styled.components';
 
 export const Login: React.FC = () => {
-   return (
-      <div>
-         <LoginButton>Login</LoginButton>
-      </div>
-   );
+   return <Stack>로그인 페이지</Stack>;
 };
