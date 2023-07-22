@@ -13,6 +13,8 @@
 + 2023-07-10
   + Create Project  
 + 2023-07-15
-  + Making Common Styled Components (Stack, StackItem etc) And Designing Structure
+  + Making Common Styled Components (Stack, StackItem etc)
+  + Designing Structure
 + 2023-07-22
-  + Making Side Panel Animation Styled Components(SidePanel, DisableWrapper) </br> And installing library (recoil, react-icons)
+  + Making Side Panel Animation Styled Components(SidePanel, DisableWrapper)
+  + installing library (recoil, react-icons)
