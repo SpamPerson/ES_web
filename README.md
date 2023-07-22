@@ -10,6 +10,6 @@
 4. recoil - ^0.7.7.
 
 # Working...
-1. Create Project - 2023-07-10
-2. Making Common Styled Components (Stack, StackItem etc) And Designing Structure - 2023-07-15
-3. Making Side Panel Animation Styled Components(SidePanel, DisableWrapper) </br> And installing library (recoil, react-icons)  - 2023-07-22
++ Create Project - 2023-07-10
++ Making Common Styled Components (Stack, StackItem etc) And Designing Structure - 2023-07-15
++ Making Side Panel Animation Styled Components(SidePanel, DisableWrapper) </br> And installing library (recoil, react-icons)  - 2023-07-22
