@@ -2,7 +2,7 @@ import { Stack } from '../styled.components';
 
 export const Home: React.FC = () => {
    return (
-      <Stack>
+      <Stack verticalAlign="center" horizontalAlign="center" horizontal>
          Home
       </Stack>
    );

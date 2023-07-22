@@ -8,15 +8,18 @@ import { AuthenticationProvider } from './components/contexts/providers/Authenti
 
 import App from './App';
 import './index.css';
+import { RecoilRoot } from 'recoil';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
    <React.StrictMode>
-      <BrowserRouter>
-         <AuthenticationProvider>
-            <App />
-         </AuthenticationProvider>
-      </BrowserRouter>
+      <RecoilRoot>
+         <BrowserRouter>
+            <AuthenticationProvider>
+               <App />
+            </AuthenticationProvider>
+         </BrowserRouter>
+      </RecoilRoot>
    </React.StrictMode>
 );
 
