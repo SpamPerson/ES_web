@@ -140,7 +140,7 @@ export const SidePanel = styled(Stack)<IPenal>`
          right: ${right};
          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
          animation-name: ${animationSidePanel};
-         animation-duration: .3s;
+         animation-duration: 0.3s;
          animation-fill-mode: none;
       `;
    }}
@@ -164,6 +164,19 @@ export const LoginButton = styled.button`
    color: #ffffff;
    border: none;
    width: 100%;
+   cursor: pointer;
+   &:hover {
+      background-color: #e0e0e0;
+   }
+`;
+
+export const DefaultButton = styled.button`
+   border: none;
+   background-color: #ffffff;
+   height: 48px;
+   border-radius: 5px;
+   padding: 10px;
+   text-align: center;
    cursor: pointer;
    &:hover {
       background-color: #e0e0e0;

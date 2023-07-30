@@ -17,4 +17,6 @@
   + Designing Structure
 + 2023-07-22
   + Making Side Panel Animation Styled Components(SidePanel, DisableWrapper)
-  + installing library (recoil, react-icons)
+  + Installing library (recoil, react-icons)
++ 2023-07-30
+  + Making Home Styled 

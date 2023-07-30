@@ -30,7 +30,9 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                   setIsPenalOpen(!isPenalOpen);
                }}
             />
-            <Stack style={{ fontSize: 30, fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }}>ES</Stack>
+            <Stack style={{ fontSize: 30, fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }} onClick={() => navigate('/')}>
+               ES
+            </Stack>
             {!isLogin && (
                <NavLoginLink top={20} right={20} onClick={() => navigate('/login')}>
                   로그인
@@ -41,9 +43,9 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
             <>
                <DisableWrapper onClick={() => setIsPenalOpen(false)} />
                <SidePanel position="left">
-                  <Stack horizontalAlign='center'>
+                  <Stack horizontalAlign="center">
                      <Stack horizontal horizontalAlign="end" style={{ padding: 5 }}>
-                        <GrClose fontSize={20} style={{cursor:'pointer', userSelect:'none'}} onClick={()=>setIsPenalOpen(false)}/>
+                        <GrClose fontSize={20} style={{ cursor: 'pointer', userSelect: 'none' }} onClick={() => setIsPenalOpen(false)} />
                      </Stack>
                   </Stack>
                </SidePanel>
