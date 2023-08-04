@@ -82,6 +82,14 @@ export const TopNavStack = styled(Stack)`
    border-bottom: 1px solid #e0e0e0;
 `;
 
+export const Link = styled.span`
+   cursor: pointer;
+   user-select: none;
+   &:hover {
+      color: darkblue;
+   }
+`;
+
 export const NavLoginLink = styled(StackItem)<INavLoginLink>`
    ${(props) => css`
       top: ${props.top ? `${props.top}px` : undefined};
@@ -160,10 +168,11 @@ export const LoginButton = styled.button`
    border-radius: 3px;
    font-size: 1rem;
    font-weight: 700;
-   background-color: #204ef5;
+   background-color: darkblue;
    color: #ffffff;
    border: none;
    width: 100%;
+   user-select: none;
    cursor: pointer;
    &:hover {
       background-color: #e0e0e0;
@@ -180,5 +189,18 @@ export const DefaultButton = styled.button`
    cursor: pointer;
    &:hover {
       background-color: #e0e0e0;
+   }
+`;
+
+export const TextField = styled.input`
+   height: 40px;
+   width: 100%;
+   padding: 5px;
+   box-sizing: border-box;
+   border: 1px solid #e0e0e0;
+   border-radius: 5px;
+   &:focus-visible {
+      outline: none;
+      border-color: darkblue;
    }
 `;
