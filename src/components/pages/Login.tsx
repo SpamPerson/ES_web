@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { Link, LoginButton, Stack, StackItem, TextField } from '../styled.components';
 
 export const Login: React.FC = () => {
+   const navigate = useNavigate();
    const onClickLogin = () => {
       
    }
@@ -19,8 +21,8 @@ export const Login: React.FC = () => {
                      <LoginButton onClick={onClickLogin}>로그인</LoginButton>
                   </Stack>
                   <Stack horizontal horizontalAlign="space-between" verticalAlign="center" style={{ height: 50 }}>
-                     <Link>비밀번호 찾기</Link>
-                     <Link>회원가입</Link>
+                     <Link onClick={() => navigate('/findpassword')}>비밀번호 찾기</Link>
+                     <Link onClick={() => navigate('/signup')}>회원가입</Link>
                   </Stack>
                </StackItem>
             </Stack>

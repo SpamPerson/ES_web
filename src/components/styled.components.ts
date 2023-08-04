@@ -90,6 +90,12 @@ export const Link = styled.span`
    }
 `;
 
+export const PageTitle = styled.span`
+   font-size: 30px;
+   font-weight: bold;
+   user-select:'none'
+`
+
 export const NavLoginLink = styled(StackItem)<INavLoginLink>`
    ${(props) => css`
       top: ${props.top ? `${props.top}px` : undefined};
@@ -187,6 +193,23 @@ export const DefaultButton = styled.button`
    padding: 10px;
    text-align: center;
    cursor: pointer;
+   &:hover {
+      background-color: #e0e0e0;
+   }
+`;
+
+export const PrimaryButton = styled.button`
+   border: none;
+   background-color: rgb(52, 152, 219);
+   height: 40px;
+   width: 100%;
+   cursor: pointer;
+   color: #ffffff;
+   text-align: center;
+   font-size: 1rem;
+   font-weight: 700;
+   border-radius: 3px;
+   user-select: none;
    &:hover {
       background-color: #e0e0e0;
    }

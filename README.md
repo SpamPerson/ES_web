@@ -22,3 +22,5 @@
   + Making Home Styled
 + 2023-08-04
   + Making Login Page
+  + Making SignUp Page
+  + Making Find Password Page
