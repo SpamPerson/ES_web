@@ -8,6 +8,10 @@
 2. react-router-dom - ^6.14.1.
 3. react-icons - 4.10.1.
 4. recoil - ^0.7.7.
+5. axios - ^1.4.0.
+6. dayjs - ^1.11.9.
+7. crypto-js - ^4.1.1.
+8. js-cookie - ^3.0.5.
 
 # Working...
 + 2023-07-10
@@ -24,3 +28,6 @@
   + Making Login Page
   + Making SignUp Page
   + Making Find Password Page
++ 2023-08-11
+  + Installing library (axios, dayjs, cryto-js, js-cookie)
+  + Setting Athentication (JWT)

@@ -8,7 +8,7 @@ import { AuthenticationContext } from '../contexts/context';
 import { DisableWrapper, NavLoginLink, SidePanel, Stack, TopNavStack } from '../styled.components';
 import { IAuthenticationContext } from '../types';
 import { useRecoilState } from 'recoil';
-import { isPenalOpenState } from '../recoil/common.recoil';
+import { isPenalOpenState } from '../../recoil/common.recoil';
 
 interface IContentWrapper {
    children?: React.ReactNode;

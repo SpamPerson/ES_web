@@ -1,9 +1,14 @@
 export interface IAuthenticationContext {
-   tokens?: IToken;
-   userInfo?: IUser;
+   authentication?: IAuthentication;
    isLogin?: boolean;
-   setTokens?: () => void;
+   login?: (authentication: IAuthentication) => void;
    logout?: () => void;
+}
+
+export interface IAuthentication {
+   accessToken?: string;
+   expiredTime?: Date;
+   user?: IUser;
 }
 
 export interface IUser {
@@ -14,3 +19,14 @@ export interface IToken {
    accessToken?: string;
    expiredTime?: Date;
 }
+
+/**
+ * * Axios 결과
+ */
+export interface ApiResult {
+   isSuccess: boolean;
+   data?: any;
+   status?: number;
+   statusText: string;
+}
+
