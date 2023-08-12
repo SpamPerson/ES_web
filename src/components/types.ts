@@ -1,6 +1,5 @@
 export interface IAuthenticationContext {
    authentication?: IAuthentication;
-   isLogin?: boolean;
    login?: (authentication: IAuthentication) => void;
    logout?: () => void;
 }
@@ -13,6 +12,9 @@ export interface IAuthentication {
 
 export interface IUser {
    name: string;
+   mail: string;
+   userId: string;
+   password?: string;
 }
 
 export interface IToken {
@@ -29,4 +31,3 @@ export interface ApiResult {
    status?: number;
    statusText: string;
 }
-

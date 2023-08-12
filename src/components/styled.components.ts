@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { Styles } from 'styled-components/dist/types';
 
 export type AlignmentType = AlignmentBaseType | SpradeType;
 export type SpradeType = 'space-between' | 'space-around' | 'space-evenly';
@@ -10,10 +11,12 @@ export interface IStack {
    $verticalAlign?: AlignmentType;
    $horizontalAlign?: AlignmentType;
    $childrenGap?: number;
+   $styles?: Styles<object>;
 }
 
 export interface IStackItem {
-   align?: AlignmentBaseType;
+   $align?: AlignmentBaseType;
+   $styles?: Styles<object>;
 }
 
 export interface INavLoginLink {
@@ -24,7 +27,7 @@ export interface INavLoginLink {
 }
 
 export interface IPenal {
-   position?: PenalPositionType;
+   $position?: PenalPositionType;
 }
 
 export const Stack = styled.div<IStack>`
@@ -33,17 +36,19 @@ export const Stack = styled.div<IStack>`
       let alignItems: string | undefined;
       let justifyContent: string | undefined;
 
-         switch (props.$horizontal) {
-            case true:
-               alignItems = props.$verticalAlign;
-               justifyContent = props.$horizontalAlign;
-               break;
-            case false:
-               alignItems = props.$horizontalAlign;
-               justifyContent = props.$verticalAlign;
-               break;
-         }
- 
+      switch (props.$horizontal) {
+         case true:
+            alignItems = props.$verticalAlign;
+            justifyContent = props.$horizontalAlign;
+            break;
+         case false:
+            alignItems = props.$horizontalAlign;
+            justifyContent = props.$verticalAlign;
+            break;
+         default:
+            alignItems = props.$horizontalAlign;
+            justifyContent = props.$verticalAlign;
+      }
 
       switch (alignItems) {
          case 'center':
@@ -66,6 +71,7 @@ export const Stack = styled.div<IStack>`
          align-items: ${alignItems};
          justify-content: ${justifyContent};
          gap: ${props.$childrenGap ? `${props.$childrenGap}px` : undefined};
+         ${props.$styles}
       `;
    }}
 `;
@@ -73,7 +79,8 @@ export const Stack = styled.div<IStack>`
 export const StackItem = styled.div<IStackItem>`
    ${(props) => css`
       font-size: 14px;
-      align-self: ${props.align};
+      align-self: ${props.$align};
+      ${props.$styles}
    `}
 `;
 
@@ -135,7 +142,7 @@ export const SidePanel = styled(Stack)<IPenal>`
       let left: number | undefined = undefined;
       let right: number | undefined = undefined;
 
-      switch (props.position) {
+      switch (props.$position) {
          case 'left':
             left = 0;
             break;

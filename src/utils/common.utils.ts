@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { IUser } from '../components/types';
 
 export const decrypt = (data: any) => {
-   const decryptData = CryptoJS.AES.decrypt(data, ENCRY_KEY).toString();
+   const decryptData = CryptoJS.AES.decrypt(data, ENCRY_KEY).toString(CryptoJS.enc.Utf8);
    return decryptData;
 };
 
@@ -30,10 +30,11 @@ export const getRefreshToken = () => {
 };
 
 export const getAccessToken = () => {
-   let token = window.sessionStorage.getItem(SESSION_STORAGE_ACCESS_TOKEN_KEY); 
+   let token = window.sessionStorage.getItem(SESSION_STORAGE_ACCESS_TOKEN_KEY);
    let expiredTime = window.sessionStorage.getItem(SESSION_STORAGE_ACCESS_TOKEN_EXPIREDATE_KEY);
    if (token && expiredTime) {
-      return { token: decrypt(token), expireDate: dayjs(expiredTime).toDate() };
+      token = decrypt(token);
+      return { token: token, expireDate: dayjs(expiredTime).toDate() };
    } else {
       return undefined;
    }

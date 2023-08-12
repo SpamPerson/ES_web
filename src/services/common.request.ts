@@ -9,7 +9,7 @@ const instance = axios.create({
 
 export const reconnect = async (refreshToken?: string) => {
    try {
-      const reconnect = await instance.get('/reconnect', {
+      const reconnect = await instance.get('/user/reconnect', {
          headers: {
             Authorization: `Basic ${refreshToken}`,
          },
