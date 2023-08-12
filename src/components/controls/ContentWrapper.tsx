@@ -9,7 +9,8 @@ import { DisableWrapper, NavLoginLink, SidePanel, Stack, TopNavStack } from '../
 import { IAuthenticationContext } from '../types';
 import { useRecoilState } from 'recoil';
 import { isPenalOpenState } from '../../recoil/common.recoil';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface IContentWrapper {
    children?: React.ReactNode;
 }
@@ -22,7 +23,7 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
 
    return (
       <Stack style={{ overflow: 'hidden' }}>
-         <TopNavStack horizontal verticalAlign="center" horizontalAlign="center" style={{ width: '100%' }}>
+         <TopNavStack $horizontal $verticalAlign="center" $horizontalAlign="center" style={{ width: '100%' }}>
             <FiMenu
                style={{ cursor: 'pointer', position: 'absolute', left: 10 }}
                fontSize={30}
@@ -34,7 +35,7 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                ES
             </Stack>
             {!isLogin && (
-               <NavLoginLink top={20} right={20} onClick={() => navigate('/login')}>
+               <NavLoginLink $top={20} $right={20} onClick={() => navigate('/login')}>
                   로그인
                </NavLoginLink>
             )}
@@ -43,8 +44,8 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
             <>
                <DisableWrapper onClick={() => setIsPenalOpen(false)} />
                <SidePanel position="left">
-                  <Stack horizontalAlign="center">
-                     <Stack horizontal horizontalAlign="end" style={{ padding: 5 }}>
+                  <Stack $horizontalAlign="center">
+                     <Stack $horizontal $horizontalAlign="end" style={{ padding: 5 }}>
                         <GrClose fontSize={20} style={{ cursor: 'pointer', userSelect: 'none' }} onClick={() => setIsPenalOpen(false)} />
                      </Stack>
                   </Stack>
@@ -52,6 +53,7 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
             </>
          )}
          <Stack style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}>{props.children}</Stack>
+         <ToastContainer />
       </Stack>
    );
 };

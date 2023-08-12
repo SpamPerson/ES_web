@@ -6,10 +6,10 @@ export type AlignmentBaseType = 'center' | 'start' | 'end';
 export type PenalPositionType = 'left' | 'right';
 
 export interface IStack {
-   horizontal?: boolean;
-   verticalAlign?: AlignmentType;
-   horizontalAlign?: AlignmentType;
-   childrenGap?: number;
+   $horizontal?: boolean;
+   $verticalAlign?: AlignmentType;
+   $horizontalAlign?: AlignmentType;
+   $childrenGap?: number;
 }
 
 export interface IStackItem {
@@ -17,10 +17,10 @@ export interface IStackItem {
 }
 
 export interface INavLoginLink {
-   top?: number;
-   bottom?: number;
-   left?: number;
-   right?: number;
+   $top?: number;
+   $bottom?: number;
+   $left?: number;
+   $right?: number;
 }
 
 export interface IPenal {
@@ -33,16 +33,17 @@ export const Stack = styled.div<IStack>`
       let alignItems: string | undefined;
       let justifyContent: string | undefined;
 
-      switch (props.horizontal) {
-         case true:
-            alignItems = props.verticalAlign;
-            justifyContent = props.horizontalAlign;
-            break;
-         case false:
-            alignItems = props.horizontalAlign;
-            justifyContent = props.verticalAlign;
-            break;
-      }
+         switch (props.$horizontal) {
+            case true:
+               alignItems = props.$verticalAlign;
+               justifyContent = props.$horizontalAlign;
+               break;
+            case false:
+               alignItems = props.$horizontalAlign;
+               justifyContent = props.$verticalAlign;
+               break;
+         }
+ 
 
       switch (alignItems) {
          case 'center':
@@ -61,10 +62,10 @@ export const Stack = styled.div<IStack>`
 
       return css`
          box-sizing: border-box;
-         flex-flow: ${props.horizontal ? 'row' : 'column'} nowrap;
+         flex-flow: ${props.$horizontal ? 'row' : 'column'} nowrap;
          align-items: ${alignItems};
          justify-content: ${justifyContent};
-         gap: ${props.childrenGap ? `${props.childrenGap}px` : undefined};
+         gap: ${props.$childrenGap ? `${props.$childrenGap}px` : undefined};
       `;
    }}
 `;
@@ -93,15 +94,15 @@ export const Link = styled.span`
 export const PageTitle = styled.span`
    font-size: 30px;
    font-weight: bold;
-   user-select:'none'
-`
+   user-select: 'none';
+`;
 
 export const NavLoginLink = styled(StackItem)<INavLoginLink>`
    ${(props) => css`
-      top: ${props.top ? `${props.top}px` : undefined};
-      bottom: ${props.bottom ? `${props.bottom}px` : undefined};
-      left: ${props.left ? `${props.left}px` : undefined};
-      right: ${props.right ? `${props.right}px` : undefined};
+      top: ${props.$top ? `${props.$top}px` : undefined};
+      bottom: ${props.$bottom ? `${props.$bottom}px` : undefined};
+      left: ${props.$left ? `${props.$left}px` : undefined};
+      right: ${props.$right ? `${props.$right}px` : undefined};
    `}
    position: absolute;
    user-select: none;

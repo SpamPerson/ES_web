@@ -29,19 +29,38 @@ export const getRefreshToken = () => {
    return token;
 };
 
-export const setRefreshToken = async(token: string, expiredTime: number) => {
-   Cookies.set(COOKIE_REFRESH_TOKEN, encrypt(token), { expires: dayjs().add(expiredTime).toDate() });
+export const getAccessToken = () => {
+   let token = window.sessionStorage.getItem(SESSION_STORAGE_ACCESS_TOKEN_KEY); 
+   let expiredTime = window.sessionStorage.getItem(SESSION_STORAGE_ACCESS_TOKEN_EXPIREDATE_KEY);
+   if (token && expiredTime) {
+      return { token: decrypt(token), expireDate: dayjs(expiredTime).toDate() };
+   } else {
+      return undefined;
+   }
 };
 
-export const setSessionStorageUserInfo = async(user: IUser) => {
+export const getSessionStorageUserInfo = () => {
+   let user: IUser = JSON.parse(window.sessionStorage.getItem(SESSION_STORAGE_USER_KEY)!);
+   if (user) {
+      return user;
+   } else {
+      return undefined;
+   }
+};
+
+export const setRefreshToken = async (token: string, expireTime: number) => {
+   Cookies.set(COOKIE_REFRESH_TOKEN, encrypt(token), { expires: dayjs().add(expireTime).toDate() });
+};
+
+export const setSessionStorageUserInfo = async (user: IUser) => {
    window.sessionStorage.setItem(SESSION_STORAGE_USER_KEY, JSON.stringify(user));
 };
 
-export const setAccessToken = async(accessToken: string, expiredTime: number) => {
+export const setAccessToken = async (accessToken: string, expireDate: Date) => {
    window.sessionStorage.setItem(SESSION_STORAGE_ACCESS_TOKEN_KEY, encrypt(accessToken));
-   window.sessionStorage.setItem(SESSION_STORAGE_ACCESS_TOKEN_EXPIREDATE_KEY, dayjs().add(expiredTime).toString());
+   window.sessionStorage.setItem(SESSION_STORAGE_ACCESS_TOKEN_EXPIREDATE_KEY, dayjs(expireDate).toString());
 };
 
 export const removeRefreshToken = () => {
-    Cookies.remove(COOKIE_REFRESH_TOKEN);
-}
+   Cookies.remove(COOKIE_REFRESH_TOKEN);
+};

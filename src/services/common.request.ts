@@ -7,23 +7,6 @@ const instance = axios.create({
    baseURL: process.env.REACT_APP_ES_API_URL,
 });
 
-export const ensureClient = async (authentication: IAuthentication) => {
-   if (dayjs(authentication.expiredTime).isAfter(dayjs())) {
-      return { Authorization: `Bearer ${authentication.accessToken}`, 'Access-Control-Allow-Origin': '*' };
-   } else {
-      const refreshToken = getRefreshToken();
-      if (refreshToken) {
-         const response = await reconnect(refreshToken);
-         if (response) {
-            setRefreshToken(response?.data.refreshToken, response.data.refreshTokenExpireTime);
-            setSessionStorageUserInfo(response?.data.user);
-            setAccessToken(response?.data.accessToken, response?.data.accessTokenExpireTime);
-            return { Authorization: `Bearer ${response?.data.accessToken}`, 'Access-Control-Allow-Origin': '*' };
-         }
-      }
-   }
-};
-
 export const reconnect = async (refreshToken?: string) => {
    try {
       const reconnect = await instance.get('/reconnect', {
@@ -36,6 +19,23 @@ export const reconnect = async (refreshToken?: string) => {
       }
    } catch (err) {
       removeRefreshToken();
+   }
+};
+
+export const ensureClient = async (authentication: IAuthentication) => {
+   if (dayjs(authentication.expireDate).isAfter(dayjs())) {
+      return { Authorization: `Bearer ${authentication.accessToken}`, 'Access-Control-Allow-Origin': '*' };
+   } else {
+      const refreshToken = getRefreshToken();
+      if (refreshToken) {
+         const response = await reconnect(refreshToken);
+         if (response) {
+            setRefreshToken(response?.data.refreshToken, response.data.refreshTokenExpireTime);
+            setSessionStorageUserInfo(response?.data.user);
+            setAccessToken(response?.data.accessToken, dayjs().add(response?.data.accessTokenExpireTime, 'millisecond').toDate());
+            return { Authorization: `Bearer ${response?.data.accessToken}`, 'Access-Control-Allow-Origin': '*' };
+         }
+      }
    }
 };
 
@@ -61,7 +61,7 @@ export const httpGet = async (url: string, authentication?: IAuthentication) => 
    }
 };
 
-export const httpPost = async (url: string, authentication?: IAuthentication, data?: any) => {
+export const httpPost = async (url: string, data?: any, authentication?: IAuthentication) => {
    const result: ApiResult = { isSuccess: false, statusText: '' };
    try {
       let headers;
@@ -78,8 +78,7 @@ export const httpPost = async (url: string, authentication?: IAuthentication, da
       }
       return result;
    } catch (err) {
-      console.log(err);
-      throw err;
+      return { isSuccess: false, statusText: '' };
    }
 };
 

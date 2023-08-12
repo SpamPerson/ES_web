@@ -7,7 +7,7 @@ export interface IAuthenticationContext {
 
 export interface IAuthentication {
    accessToken?: string;
-   expiredTime?: Date;
+   expireDate?: Date;
    user?: IUser;
 }
 

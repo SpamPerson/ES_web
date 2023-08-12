@@ -1,5 +1,5 @@
 # Project Intro
-https://github.com/SpamPerson/ES_Documents.git
+Document: https://github.com/SpamPerson/ES_Documents.git
 
 # Web Application Info
 1. react 18 with typescript.
@@ -13,22 +13,27 @@ https://github.com/SpamPerson/ES_Documents.git
 6. dayjs - ^1.11.9.
 7. crypto-js - ^4.1.1.
 8. js-cookie - ^3.0.5.
+9. react-toastify - ^9.1.3.
 
 # Working...
 + 2023-07-10
-  + Create Project  
+  + Created Project  
 + 2023-07-15
-  + Making Common Styled Components (Stack, StackItem etc)
-  + Designing Structure
+  + Created Common Styled Components (Stack, StackItem etc)
+  + Designed Structure
 + 2023-07-22
-  + Making Side Panel Animation Styled Components(SidePanel, DisableWrapper)
-  + Installing library (recoil, react-icons)
+  + Created Side Panel Animation Styled Components(SidePanel, DisableWrapper)
+  + Installed library (recoil, react-icons)
 + 2023-07-30
-  + Making Home Styled
+  + Created Home Styled
 + 2023-08-04
-  + Making Login Page
-  + Making SignUp Page
-  + Making Find Password Page
+  + Created Login Page
+  + Created SignUp Page
+  + Created Find Password Page
 + 2023-08-11
-  + Installing library (axios, dayjs, cryto-js, js-cookie)
-  + Setting Athentication (JWT)
+  + Installed library (axios, dayjs, cryto-js, js-cookie)
+  + Athentication Set up (JWT)
++ 2023-08-12
+  + Installed library (react-toastify)
+  + Connected Rest API(es-api)
+  + Fix Styled Components props
