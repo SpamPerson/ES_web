@@ -35,5 +35,8 @@ Document: https://github.com/SpamPerson/ES_Documents.git
   + Athentication Set up (JWT)
 + 2023-08-12
   + Installed library (react-toastify)
-  + Connected Rest API(es-api)
-  + Fix Styled Components props
+  + Connected Rest API(es-api) Login && FindPassword && Change Password
+  + Fix Styled Components props wranning
+  + Created Change Password Page
+  + Created Notification Utils
+  + Created Valid User Info and Sign Up Fuction.
