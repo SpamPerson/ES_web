@@ -20,7 +20,7 @@ export const ChangePasswordAuth: React.FC = () => {
       if (!authentication) {
          navigate('/');
       }
-   }, [authentication]); 
+   }, [authentication]); // eslint-disable-line react-hooks/exhaustive-deps
 
    const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(event.currentTarget.value);
@@ -46,9 +46,11 @@ export const ChangePasswordAuth: React.FC = () => {
             warningNotification('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
             passwordInputRef.current?.focus();
          } else {
-            const response = await changePassword(authentication?.user?.userId!, password);
+            const response = await changePassword(authentication!, authentication?.user?.userId!, password);
             if (response.data) {
                navigate('/');
+            } else {
+               errorNotification("비밀번호 변경을 실패하였습니다.")
             }
          }
       } else {
@@ -75,7 +77,7 @@ export const ChangePasswordAuth: React.FC = () => {
    };
 
    const checkStrongPassword = (password: string) => {
-      const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(password);
       const hasUppercase = /[A-Z]/.test(password);
       const hasLowercase = /[a-z]/.test(password);
       const hasEightChar = password.length > 7;

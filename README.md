@@ -40,3 +40,7 @@ Document: https://github.com/SpamPerson/ES_Documents.git
   + Created Change Password Page
   + Created Notification Utils
   + Created Valid User Info and Sign Up Fuction.
++ 2023-08-13
+  + Created WordWrapper component
+  + Creating DetailList component
+  + Fix ChangePassword Error

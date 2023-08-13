@@ -7,9 +7,9 @@ import './App.css';
 import { SignUp } from './components/pages/SignUp';
 import { FindPassword } from './components/pages/FindPassword';
 import { ChangePasswordAuth } from './components/pages/ChangePasswordAuth';
+import { WordWrapper } from './components/pages/WordWrapper';
 
 const App = () => {
-
    return (
       <div className="App">
          <ContentWrapper>
@@ -18,7 +18,8 @@ const App = () => {
                <Route path="/login" element={<Login />} />
                <Route path="/signup" element={<SignUp />} />
                <Route path="/findpassword" element={<FindPassword />} />
-               <Route path='/changepassword' element={<ChangePasswordAuth/>}/>
+               <Route path="/changepassword" element={<ChangePasswordAuth />} />
+               <Route path="/word" element={<WordWrapper />} />
             </Routes>
          </ContentWrapper>
       </div>

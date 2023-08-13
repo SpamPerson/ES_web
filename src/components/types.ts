@@ -15,6 +15,13 @@ export interface IUser {
    mail: string;
    userId: string;
    password?: string;
+   roles?: IRole[];
+}
+
+export interface IRole {
+   roleCode: string;
+   name: RoleName;
+   description?: string;
 }
 
 export interface IToken {
@@ -30,4 +37,23 @@ export interface ApiResult {
    data?: any;
    status?: number;
    statusText: string;
+}
+
+export const enum RoleName {
+   Admin = 'ROLE_ADMIN',
+   User = 'ROLE_USER',
+}
+
+export const enum MenuType {
+   Word = 'word',
+   Sentence = 'sentence',
+   Ai = 'ai',
+   UserManager = 'userManager',
+}
+
+export interface IColumn {
+   key:string,
+   name: string,
+   width: string,
+   fieldName?: string,
 }

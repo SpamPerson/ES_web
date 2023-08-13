@@ -1,4 +1,4 @@
-import { ApiResult, IUser } from '../components/types';
+import { ApiResult, IAuthentication, IUser } from '../components/types';
 import { httpGet, httpPost } from './common.request';
 
 export const requestLogin = async (userId: string, password: string): Promise<ApiResult> => {
@@ -25,9 +25,9 @@ export const findPassword = async (mail: string): Promise<ApiResult> => {
    }
 };
 
-export const changePassword = async (userId: string, password: string): Promise<ApiResult> => {
+export const changePassword = async (authentication: IAuthentication, userId: string, password: string): Promise<ApiResult> => {
    try {
-      return await httpPost('/user/password/change', { userId: userId, password: password });
+      return await httpPost('/user/password/change', { userId: userId, password: password }, authentication);
    } catch (err) {
       throw err;
    }
