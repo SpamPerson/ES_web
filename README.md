@@ -1,5 +1,6 @@
 # Project Intro
-Document: https://github.com/SpamPerson/ES_Documents.git
+1. Document: https://github.com/SpamPerson/ES_Documents
+2. Api: https://github.com/SpamPerson/ES_api
 
 # Web Application Info
 1. react 18 with typescript.
