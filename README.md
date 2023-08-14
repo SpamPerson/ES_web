@@ -42,5 +42,9 @@ Document: https://github.com/SpamPerson/ES_Documents.git
   + Created Valid User Info and Sign Up Fuction.
 + 2023-08-13
   + Created WordWrapper component
-  + Creating DetailList component
+  + Creating DetailsList component
   + Fix ChangePassword Error
++ 2023-08-14
+  + Fix DetailsList component
+  + Connected Rest API(es-api) Word
+  + Debug JWT

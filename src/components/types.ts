@@ -1,3 +1,5 @@
+export type Items = Array<{ [key: string]: any }>;
+
 export interface IAuthenticationContext {
    authentication?: IAuthentication;
    login?: (authentication: IAuthentication) => void;
@@ -51,9 +53,26 @@ export const enum MenuType {
    UserManager = 'userManager',
 }
 
+export const enum EditType {
+   TextField="textField",
+   Calendar="calednar",
+   Choice="choice"
+}
+
 export interface IColumn {
-   key:string,
-   name: string,
-   width: string,
-   fieldName?: string,
+   key: string;
+   name: string;
+   width: string;
+   fieldName?: string;
+   editType?: EditType;
+}
+
+export interface IWord {
+   wordCode?: number;
+   userId: string;
+   enWord: string;
+   krWord: string;
+   createDate: string;
+   isMemorize?: string;
+   remarks: string;
 }
