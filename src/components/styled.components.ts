@@ -235,3 +235,17 @@ export const TextField = styled.input`
       border-color: darkblue;
    }
 `;
+
+export const Dropdown = styled.select`
+   height: 40px;
+   width: 100%;
+   padding: 5px;
+   box-sizing: border-box;
+   border: 1px solid #e0e0e0;
+   border-radius: 5px;
+   user-select: none;
+   &:focus-visible {
+      outline: none;
+      border-color: darkblue;
+   }
+`;

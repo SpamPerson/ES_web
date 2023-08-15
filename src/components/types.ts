@@ -54,9 +54,15 @@ export const enum MenuType {
 }
 
 export const enum EditType {
-   TextField="textField",
-   Calendar="calednar",
-   Choice="choice"
+   TextField = 'textField',
+   Calendar = 'calednar',
+   Choice = 'choice',
+}
+
+export const enum WordSearchColumn {
+   EnWord = 'enWord',
+   KrWord = 'krWord',
+   Remarks = 'remarks',
 }
 
 export interface IColumn {

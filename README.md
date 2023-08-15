@@ -49,3 +49,7 @@
   + Fix DetailsList component
   + Connected Rest API(es-api) Word
   + Debug JWT
++ 2023-08-15
+  + Created Paging Component.
+  + Created Delete and Add UI.
+  + Created Search Column Dropdown and Search Text Field.
