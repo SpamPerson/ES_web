@@ -1,29 +1,51 @@
 import { useContext, useEffect, useState } from 'react';
 import { DetailsList } from '../controls/DetailsList';
-import { Dropdown, PageTitle, Stack, StackItem, TextField } from '../styled.components';
+import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
 import { EditType, IColumn, IWord, WordSearchColumn } from '../types';
 import { getWordList } from '../../services/word.request';
 import { AuthenticationContext } from '../contexts/context';
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { Paging } from '../controls/Paging';
+import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
 
 export const WordWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
-   const [wordItems, setWordItems] = useState<IWord[]>([]);
+   const [totalWordItems, setTotalWordItems] = useState<IWord[]>([]);
+   const [visibleItems, setVisibleItems] = useState<IWord[]>([]);
+
    const [searchColumn, setSearchColumn] = useState<WordSearchColumn>(WordSearchColumn.EnWord);
    const [searchText, setSearchText] = useState<string>('');
+   const [currentPageNum, setCurrentPageNum] = useState<number>(1);
 
    useEffect(() => {
-      if (authentication)
-         getWordList(authentication!).then((response) => {
-            if (response.isSuccess) {
-               setWordItems(response.data);
-            }
-         });
+      if (authentication) getWordItems();
    }, [authentication]);
 
+   useEffect(() => {
+      if (totalWordItems.length > 0) {
+         let newVisibleItems = totalWordItems.slice(0, PAGE_ITEM_COUNT * currentPageNum);
+         setVisibleItems(newVisibleItems);
+      } else {
+         setVisibleItems([]);
+      }
+   }, [totalWordItems]);
+
+   useEffect(() => {
+      const startNum = PAGE_ITEM_COUNT * (currentPageNum - 1) + 1;
+      const endNum = PAGE_ITEM_COUNT * currentPageNum;
+      let newVisibleItems = totalWordItems.slice(startNum - 1, endNum);
+
+      setVisibleItems(newVisibleItems);
+   }, [currentPageNum]);
+
+   const getWordItems = async () => {
+      const result = await getWordList(authentication!, searchText, searchColumn);
+      if (result.isSuccess) {
+         setTotalWordItems(result.data);
+      }
+   };
+
    const columns: IColumn[] = [
-      { key: 'wordCode', name: 'No', width: '5%', fieldName: 'wordCode' },
       { key: 'enWord', name: '단어', width: '20%', fieldName: 'enWord', editType: EditType.TextField },
       { key: 'krWord', name: '뜻', width: '20%', fieldName: 'krWord', editType: EditType.TextField },
       { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate', editType: EditType.Calendar },
@@ -85,7 +107,7 @@ export const WordWrapper: React.FC = () => {
                   <span>삭제</span>
                </Stack>
             </Stack>
-            <Stack $horizontal $childrenGap={5} style={{ width: 300 }}>
+            <Stack $horizontal $childrenGap={5} style={{ width: 400 }}>
                <StackItem style={{ width: 150 }}>
                   <Dropdown defaultValue={searchColumn} onChange={onChangeSearchColumn}>
                      <option value={WordSearchColumn.EnWord}>영단어</option>
@@ -94,13 +116,16 @@ export const WordWrapper: React.FC = () => {
                   </Dropdown>
                </StackItem>
                <TextField placeholder="검색할 단어를 입력해 주세요" value={searchText} onChange={onChangeSearchText} />
+               <Stack style={{ width: 200 }}>
+                  <PrimaryButton onClick={getWordItems}>검색</PrimaryButton>
+               </Stack>
             </Stack>
          </Stack>
          <Stack>
-            <DetailsList columns={columns} items={wordItems} isCheckBox selection={onSelection} />
+            <DetailsList columns={columns} items={visibleItems} isCheckBox selection={onSelection} isIndex />
          </Stack>
          <Stack>
-            <Paging currentPageNum={1} totalPageNum={1}/>
+            <Paging currentPageNum={currentPageNum} totalItemsCount={totalWordItems.length} setCurrentPageNum={setCurrentPageNum} />
          </Stack>
       </Stack>
    );

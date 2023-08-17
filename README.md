@@ -53,3 +53,7 @@
   + Created Paging Component.
   + Created Delete and Add UI.
   + Created Search Column Dropdown and Search Text Field.
++ 2023-08-17
+  + Paging Fuction made.
+  + Search Fuction made.
+  + DetailsList Updated(isIndex Added).

@@ -7,6 +7,7 @@ interface PDetailsList {
    items: Items;
    isAddRow?: boolean;
    isCheckBox: boolean;
+   isIndex?: boolean;
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
 }
@@ -29,6 +30,10 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
       if (props.isCheckBox) {
          newColumns.push({ key: 'checkBox', name: '', width: '5%' });
       }
+      if (props.isIndex) {
+         newColumns.push({ key: 'index', name: 'No', width: '5%' });
+      }
+
       newItems.push(...props.items);
       newColumns.push(...props.columns);
       setColumns(newColumns);
@@ -38,7 +43,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
    const onBlurChangeTextField = () => {
       alert(changeTextField);
       setModifiedContent(undefined);
-   }
+   };
 
    const list = useMemo(() => {
       const datas: any[] = [];
@@ -87,6 +92,17 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  />
                               </Stack>
                            );
+                        } else if (key === 'index') {
+                           return (
+                              <Stack
+                                 key={key}
+                                 $verticalAlign="center"
+                                 $horizontalAlign="center"
+                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5 }}
+                              >
+                                 {i + 1}
+                              </Stack>
+                           );
                         } else {
                            return (
                               <Stack
@@ -98,9 +114,14 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                               >
                                  {modifiedContent?.rowNum === i && modifiedContent.key === key ? (
                                     <>
-                           
                                        {columns[j].editType !== EditType.Choice ? (
-                                          <TextField value={changeTextField} type="" style={{ height: '100%' }} onBlur={onBlurChangeTextField} autoFocus/>
+                                          <TextField
+                                             value={changeTextField}
+                                             type=""
+                                             style={{ height: '100%' }}
+                                             onBlur={onBlurChangeTextField}
+                                             autoFocus
+                                          />
                                        ) : (
                                           <select defaultValue={data[key]}>
                                              <option value={'Y'}>Y</option>
@@ -149,7 +170,6 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                      width: value.width,
                      textAlign: 'center',
                      fontWeight: 'bold',
-                     // borderLeft: index !== 0 ? '1px solid #e0e0e0' : undefined,
                      padding: 5,
                   }}
                >
@@ -157,7 +177,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                </Stack>
             ))}
          </Stack>
-         {items.length > 0 ? list : <Stack>데이터가 없습니다.</Stack>}
+         {items.length > 0 && list}
       </Stack>
    );
 };
