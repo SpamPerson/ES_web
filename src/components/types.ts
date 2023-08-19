@@ -84,3 +84,14 @@ export interface IWord {
    isMemorize?: string;
    remarks: string;
 }
+
+export interface IDetailsListUpdateContent {
+   columnName: string;
+   rowNum: number;
+}
+
+export interface IWordUpdate {
+   wordCode: number;
+   columnName: string;
+   value: string;
+}

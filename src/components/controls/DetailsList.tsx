@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Stack, TextField } from '../styled.components';
-import { EditType, IColumn, Items } from '../types';
+import { EditType, IColumn, IDetailsListUpdateContent, Items } from '../types';
 
 interface PDetailsList {
    columns: IColumn[];
@@ -10,11 +10,7 @@ interface PDetailsList {
    isIndex?: boolean;
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
-}
-
-interface IDetailsListUpdateContent {
-   rowNum: number;
-   key: string;
+   onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
 }
 
 export const DetailsList: React.FC<PDetailsList> = (props) => {
@@ -40,8 +36,17 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
       setItems(newItems);
    }, [props]);
 
-   const onBlurChangeTextField = () => {
-      alert(changeTextField);
+   const onBlurChangeTextField = (value: string) => {
+      props.onChangeValue!(modifiedContent!, value);
+      setModifiedContent(undefined);
+   };
+
+   const onkeydownChangeTextField = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.code === 'Enter') onBlurChangeTextField(event.currentTarget.value);
+   };
+
+   const onBlurChangeSelectBox = (value: string) => {
+      props.onChangeValue!(modifiedContent!, value);
       setModifiedContent(undefined);
    };
 
@@ -83,7 +88,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5 }}
+                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
                               >
                                  <input
                                     type="checkbox"
@@ -98,7 +103,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5 }}
+                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
                               >
                                  {i + 1}
                               </Stack>
@@ -109,21 +114,31 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5 }}
+                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
                                  onDoubleClick={columns[j].editType ? () => onDoubleClick(i, key!, data[key]) : undefined}
                               >
-                                 {modifiedContent?.rowNum === i && modifiedContent.key === key ? (
+                                 {modifiedContent?.rowNum === i && modifiedContent.columnName === key ? (
                                     <>
                                        {columns[j].editType !== EditType.Choice ? (
                                           <TextField
-                                             value={changeTextField}
-                                             type=""
+                                             defaultValue={changeTextField}
                                              style={{ height: '100%' }}
-                                             onBlur={onBlurChangeTextField}
+                                             onBlur={(event: ChangeEvent<HTMLInputElement>) =>
+                                                onBlurChangeTextField(event.currentTarget.value)
+                                             }
+                                             onKeyDown={onkeydownChangeTextField}
                                              autoFocus
                                           />
                                        ) : (
-                                          <select defaultValue={data[key]}>
+                                          <select
+                                             defaultValue={data[key]}
+                                             onBlur={(event: ChangeEvent<HTMLSelectElement>) =>
+                                                onBlurChangeSelectBox(event.currentTarget.value)
+                                             }
+                                             onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                                                onBlurChangeSelectBox(event.currentTarget.value)
+                                             }
+                                          >
                                              <option value={'Y'}>Y</option>
                                              <option value={'N'}>N</option>
                                           </select>
@@ -156,12 +171,12 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
 
    const onDoubleClick = (rowNum: number, key: string, value: string) => {
       setChangeTextField(value);
-      setModifiedContent({ rowNum: rowNum, key: key });
+      setModifiedContent({ rowNum: rowNum, columnName: key });
    };
 
    return (
       <Stack style={{ padding: '10px 40px' }}>
-         <Stack $horizontal style={{ border: '1px solid #e0e0e0', backgroundColor: '#e0e0e0' }}>
+         <Stack $horizontal style={{ border: '1px solid #e0e0e0', backgroundColor: '#e0e0e0', userSelect: 'none' }}>
             {columns.map((value, index) => (
                <Stack
                   $verticalAlign="center"

@@ -46,7 +46,7 @@ export const Paging: React.FC<PPaging> = (props) => {
             onClick={onClickPrevPage}
             style={{
                cursor: 'pointer',
-               color: props.currentPageNum - 1 === 0  ? '#e0e0e0' : undefined,
+               color: props.currentPageNum - 1 === 0 || props.totalItemsCount < PAGE_ITEM_COUNT ? '#e0e0e0' : undefined,
             }}
          />
 

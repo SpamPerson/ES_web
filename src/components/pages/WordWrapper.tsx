@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { DetailsList } from '../controls/DetailsList';
 import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
-import { EditType, IColumn, IWord, WordSearchColumn } from '../types';
-import { getWordList } from '../../services/word.request';
+import { EditType, IColumn, IDetailsListUpdateContent, IWord, IWordUpdate, WordSearchColumn } from '../types';
+import { getWordList, updateWord } from '../../services/word.request';
 import { AuthenticationContext } from '../contexts/context';
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { Paging } from '../controls/Paging';
@@ -55,9 +55,9 @@ export const WordWrapper: React.FC = () => {
    const columns: IColumn[] = [
       { key: 'enWord', name: '단어', width: '20%', fieldName: 'enWord', editType: EditType.TextField },
       { key: 'krWord', name: '뜻', width: '20%', fieldName: 'krWord', editType: EditType.TextField },
-      { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate', editType: EditType.Calendar },
+      { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate' },
       { key: 'isMemorize', name: '암기 여부', width: '10%', fieldName: 'isMemorize', editType: EditType.Choice },
-      { key: 'remarks', name: '비고', width: '30%', fieldName: 'remarks' },
+      { key: 'remarks', name: '비고', width: '30%', fieldName: 'remarks', editType: EditType.TextField },
    ];
 
    const onSelection = (items: any) => {
@@ -70,6 +70,25 @@ export const WordWrapper: React.FC = () => {
 
    const onChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchText(event.currentTarget.value);
+   };
+
+   const onKeydownSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.code === 'Enter') getWordItems();
+   };
+
+   const onChangeValue = async (info: IDetailsListUpdateContent, value: string) => {
+      let newItems: IWord[] = [...visibleItems];
+      let wordCode = visibleItems[info.rowNum].wordCode;
+      let changeWord: IWordUpdate = { columnName: info.columnName, wordCode: wordCode!, value: value };
+      const result = await updateWord(authentication!, changeWord);
+      if (result.isSuccess) {
+         newItems.splice(
+            newItems.findIndex((element) => element.wordCode === result.data.wordCode),
+            1,
+            result.data
+         );
+      }
+      setVisibleItems(newItems);
    };
 
    const onClickAdd = () => {};
@@ -123,14 +142,26 @@ export const WordWrapper: React.FC = () => {
                         <option value={WordSearchColumn.Remarks}>비고</option>
                      </Dropdown>
                   </StackItem>
-                  <TextField placeholder="검색할 단어를 입력해 주세요" value={searchText} onChange={onChangeSearchText} />
+                  <TextField
+                     placeholder="검색할 단어를 입력해 주세요"
+                     value={searchText}
+                     onChange={onChangeSearchText}
+                     onKeyDown={onKeydownSearch}
+                  />
                   <Stack style={{ width: 200 }}>
                      <PrimaryButton onClick={getWordItems}>검색</PrimaryButton>
                   </Stack>
                </Stack>
             </Stack>
             <Stack>
-               <DetailsList columns={columns} items={visibleItems} isCheckBox selection={onSelection} isIndex />
+               <DetailsList
+                  columns={columns}
+                  items={visibleItems}
+                  isCheckBox
+                  selection={onSelection}
+                  onChangeValue={onChangeValue}
+                  isIndex
+               />
             </Stack>
             <Stack>
                <Paging currentPageNum={currentPageNum} totalItemsCount={totalWordItems.length} setCurrentPageNum={setCurrentPageNum} />
