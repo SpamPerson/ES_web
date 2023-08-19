@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import {
    getAccessToken,
@@ -15,7 +15,7 @@ import { AuthenticationProvider } from './components/contexts/providers/Authenti
 import { IAuthentication } from './components/types';
 
 const App = () => {
-   const [authentication, setAuthentication] = useState<IAuthentication | undefined>(() => {
+   const [authentication] = useState<IAuthentication | undefined>(() => {
       let refreshToken = getRefreshToken();
       let accessToken = getAccessToken();
       let userInfo = getSessionStorageUserInfo();
