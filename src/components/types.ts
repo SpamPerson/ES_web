@@ -2,14 +2,16 @@ export type Items = Array<{ [key: string]: any }>;
 
 export interface IAuthenticationContext {
    authentication?: IAuthentication;
+   setAuthentication?: (authentication: IAuthentication) => void;
+   isLoding?: boolean;
    login?: (authentication: IAuthentication) => void;
    logout?: () => void;
 }
 
 export interface IAuthentication {
-   accessToken?: string;
-   expireDate?: Date;
-   user?: IUser;
+   accessToken: string;
+   expireDate: Date;
+   user: IUser;
 }
 
 export interface IUser {

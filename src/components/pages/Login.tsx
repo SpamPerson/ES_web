@@ -37,8 +37,9 @@ export const Login: React.FC = () => {
                expireDate: dayjs().add(response.data.accessTokenExpireTime, 'millisecond').toDate(),
                user: response.data.user,
             });
+            navigate('/');
          } else {
-            errorNotification("아이디 또는 비밀번호를 확인해 주세요","top-center");
+            errorNotification('아이디 또는 비밀번호를 확인해 주세요', 'top-center');
             setUserId('');
             setPassword('');
          }

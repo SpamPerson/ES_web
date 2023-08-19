@@ -41,6 +41,14 @@ export const checkUserMail = async (mail: string): Promise<ApiResult> => {
    }
 };
 
+export const getUserInfo = async (): Promise<ApiResult> => {
+   try {
+      return await httpGet(`/user/info`);
+   } catch (err) {
+      throw err;
+   }
+}
+
 export const signUp = async (user: IUser): Promise<ApiResult> => {
    try {
       return await httpPost(`/user/signup`, user);

@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { ApiResult, IAuthentication } from '../components/types';
 import dayjs from 'dayjs';
 import { getRefreshToken, removeRefreshToken, setAccessToken, setRefreshToken, setSessionStorageUserInfo } from '../utils/common.utils';
 
-const instance = axios.create({
+let instance: AxiosInstance = axios.create({
    baseURL: process.env.REACT_APP_ES_API_URL,
 });
 
-export const reconnect = async (refreshToken?: string) => {
+export const reconnect = async (refreshToken: string) => {
    try {
       const reconnect = await instance.get('/user/reconnect', {
          headers: {
@@ -56,8 +56,7 @@ export const httpGet = async (url: string, authentication?: IAuthentication) => 
       }
       return result;
    } catch (err) {
-      console.log(err);
-      throw err;
+      return { isSuccess: false, statusText: '' };
    }
 };
 

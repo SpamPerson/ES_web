@@ -5,7 +5,6 @@ export const getWordList = async (authentication: IAuthentication, searchText?: 
    try {
       const searchValue = searchText ? searchText :'@empty';
       const orderByValue = orderBy ? orderBy : 'ASC';
-   
       return await httpGet(`word/list/${searchColumn}/${searchValue}/${orderByValue}`, authentication);
    } catch (err) {
       throw err;

@@ -57,3 +57,6 @@
   + Paging Fuction made.
   + Search Fuction made.
   + DetailsList Updated(isIndex Added).
++ 2023-08-19
+  + Fixed Authentication bug When refresh the web page.
+  

@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import { BrowserRouter } from 'react-router-dom';
-
+import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import { AuthenticationProvider } from './components/contexts/providers/AuthenticationProvider';
 
 import App from './App';
 import './index.css';
@@ -12,15 +9,11 @@ import { RecoilRoot } from 'recoil';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-   <React.StrictMode>
-      <RecoilRoot>
-         <BrowserRouter>
-            <AuthenticationProvider>
-               <App />
-            </AuthenticationProvider>
-         </BrowserRouter>
-      </RecoilRoot>
-   </React.StrictMode>
+   <RecoilRoot>
+      <HashRouter>
+         <App />
+      </HashRouter>
+   </RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function

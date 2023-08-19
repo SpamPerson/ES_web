@@ -1,26 +1,33 @@
 import { useContext } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { FiMenu } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
 import { AuthenticationContext } from '../contexts/context';
 import { DisableWrapper, NavLoginLink, SidePanel, Stack, TopNavStack } from '../styled.components';
-import { IAuthenticationContext } from '../types';
+import { IAuthentication, IAuthenticationContext } from '../types';
 import { useRecoilState } from 'recoil';
 import { isPenalOpenState } from '../../recoil/common.recoil';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserProfile } from './UserProfile';
 import { PanelMenu } from './PanelMenu';
+import { Home } from '../pages/Home';
+import { ChangePasswordAuth } from '../pages/ChangePasswordAuth';
+import { WordWrapper } from '../pages/WordWrapper';
+import { Login } from '../pages/Login';
+import { SignUp } from '../pages/SignUp';
+import { FindPassword } from '../pages/FindPassword';
+
 interface IContentWrapper {
    children?: React.ReactNode;
+   authentication?: IAuthentication;
 }
 
 export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
-   const { authentication, logout } = useContext<IAuthenticationContext>(AuthenticationContext);
+   const { logout } = useContext<IAuthenticationContext>(AuthenticationContext);
    const [isPanelOpen, setIsPanelOpen] = useRecoilState<boolean>(isPenalOpenState);
-
    const navigate = useNavigate();
 
    return (
@@ -36,7 +43,7 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
             <Stack style={{ fontSize: 30, fontWeight: 'bold', cursor: 'pointer', userSelect: 'none' }} onClick={() => navigate('/')}>
                ES
             </Stack>
-            {!authentication ? (
+            {!props.authentication ? (
                <NavLoginLink $top={20} $right={20} onClick={() => navigate('/login')}>
                   로그인
                </NavLoginLink>
@@ -56,11 +63,25 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                      </Stack>
                   </Stack>
                   <UserProfile closePanel={() => setIsPanelOpen(false)} />
-                  {authentication && <PanelMenu closePanel={() => setIsPanelOpen(false)} />}
+                  {props.authentication && <PanelMenu closePanel={() => setIsPanelOpen(false)} />}
                </SidePanel>
             </>
          )}
-         <Stack style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}>{props.children}</Stack>
+         <Stack style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}>
+            <Routes>
+               <Route path="*" element={<Navigate to={'/login'} />} />
+               <Route path="" element={<Home />} />
+               <Route path="/login" element={<Login />} />
+               <Route path="/signup" element={<SignUp />} />
+               <Route path="/findpassword" element={<FindPassword />} />
+               {props.authentication && (
+                  <>
+                     <Route path="/word" element={<WordWrapper />} />
+                     <Route path="/changepassword" element={<ChangePasswordAuth />} />
+                  </>
+               )}
+            </Routes>
+         </Stack>
          <ToastContainer />
       </Stack>
    );

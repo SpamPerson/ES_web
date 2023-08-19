@@ -44,10 +44,13 @@ export const Paging: React.FC<PPaging> = (props) => {
       >
          <FiChevronLeft
             onClick={onClickPrevPage}
-            style={{ cursor: 'pointer', color: props.currentPageNum - 1 === 0 ? '#e0e0e0' : undefined }}
+            style={{
+               cursor: 'pointer',
+               color: props.currentPageNum - 1 === 0  ? '#e0e0e0' : undefined,
+            }}
          />
 
-         {visiblePageNum.length > 0 ? (
+         {visiblePageNum.length > 0 && props.totalItemsCount > PAGE_ITEM_COUNT ? (
             visiblePageNum.map((value, index) => {
                let pageNum = value + 1;
                let isCurrentPage = value + 1 === props.currentPageNum;
@@ -69,7 +72,7 @@ export const Paging: React.FC<PPaging> = (props) => {
             style={{
                cursor: 'pointer',
                color:
-                  props.currentPageNum + 1 !== visiblePageNum[visiblePageNum.length - 1] + 2 && visiblePageNum.length > 0
+                  props.currentPageNum + 1 !== visiblePageNum[visiblePageNum.length - 1] + 2 && props.totalItemsCount > PAGE_ITEM_COUNT
                      ? undefined
                      : '#e0e0e0',
             }}
