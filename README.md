@@ -65,5 +65,6 @@
   + Made Add Word Feature.
   + Made Word Count Feature.
   + Made Sentence Wrapper component.
-  + Made Select and Search Sentence List.
+  + Made Search Sentence List.
+  + Made Select Sentence Feature. 
   
