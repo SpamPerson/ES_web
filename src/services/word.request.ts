@@ -1,5 +1,5 @@
-import { IAuthentication, IWordUpdate } from '../components/types';
-import { httpGet, httpPatch } from './common.request';
+import { IAuthentication, IWord, IWordUpdate } from '../components/types';
+import { httpGet, httpPatch, httpPost, httpPut } from './common.request';
 
 export const getWordList = async (authentication: IAuthentication, searchText?: string, searchColumn?: string, orderBy?: string) => {
    try {
@@ -11,6 +11,14 @@ export const getWordList = async (authentication: IAuthentication, searchText?: 
    }
 };
 
+export const getWordCount = async (authentication: IAuthentication) => {
+   try {
+      return await httpGet('word/count',authentication);
+   } catch (err) {
+      throw err;
+   }
+}
+
 export const updateWord = async (authentication: IAuthentication, changeInfo: IWordUpdate) => {
    try {
       return await httpPatch('word', changeInfo, authentication);
@@ -19,10 +27,18 @@ export const updateWord = async (authentication: IAuthentication, changeInfo: IW
    }
 };
 
-export const saveWord = async (authentication: IAuthentication) => {
+export const saveWord = async (authentication: IAuthentication, word: IWord) => {
    try {
-      //   return await httpPost('/word', , authentication);
+      return await httpPost('/word', word, authentication);
    } catch (err) {
       throw err;
    }
 };
+
+export const deleteWords = async (authentication: IAuthentication, words: IWord[]) => {
+   try {
+      return await httpPut('/word/list', words, authentication);
+   } catch (err) {
+      throw err;
+   }
+}

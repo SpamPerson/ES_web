@@ -60,4 +60,8 @@
 + 2023-08-19
   + Fixed Authentication bug When refresh the web page.
   + Made Update Word Feature.
++ 2023-08-20
+  + Made Delete Word Feature.
+  + Made Add Word Feature.
+  + Made Word Count Feature.
   

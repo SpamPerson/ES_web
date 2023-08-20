@@ -124,3 +124,25 @@ export const httpPatch = async (url: string, data?: any, authentication?: IAuthe
       throw err;
    }
 };
+
+export const httpPut = async (url: string, data?: any, authentication?: IAuthentication) => {
+   const result: ApiResult = { isSuccess: false, statusText: '' };
+   try {
+      let headers;
+      if (authentication) {
+         headers = await ensureClient(authentication);
+      }
+      const response = await instance.put(url, data, { headers: headers });
+      if (response.status === 200) {
+         result.isSuccess = true;
+         result.data = response.data;
+      } else {
+         result.status = response.status;
+         result.statusText = response.statusText;
+      }
+      return result;
+   } catch (err) {
+      console.log(err);
+      throw err;
+   }
+};

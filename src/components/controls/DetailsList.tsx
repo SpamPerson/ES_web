@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Stack, TextField } from '../styled.components';
 import { EditType, IColumn, IDetailsListUpdateContent, Items } from '../types';
+import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 interface PDetailsList {
    columns: IColumn[];
@@ -11,6 +12,7 @@ interface PDetailsList {
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
    onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
+   setAddItem?: (item: any) => void;
 }
 
 export const DetailsList: React.FC<PDetailsList> = (props) => {
@@ -19,6 +21,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
    const [checkItemIndexs, setCheckItemIndexs] = useState<number[]>([]);
    const [modifiedContent, setModifiedContent] = useState<IDetailsListUpdateContent>();
    const [changeTextField, setChangeTextField] = useState<string>('');
+   const [addItem, setAddItem] = useState<any>();
 
    useEffect(() => {
       let newColumns: IColumn[] = [];
@@ -48,6 +51,14 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
    const onBlurChangeSelectBox = (value: string) => {
       props.onChangeValue!(modifiedContent!, value);
       setModifiedContent(undefined);
+   };
+
+   const onClickAdd = () => {
+      props.setAddItem!(addItem);
+   };
+
+   const onChangeAddRow = (key: string, value: string) => {
+      setAddItem({ ...addItem, [key]: value });
    };
 
    const list = useMemo(() => {
@@ -80,7 +91,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
             {datas.map((data, i) => {
                const objectKeys = Object.keys(data);
                return (
-                  <Stack key={`${i}_row`} $horizontal style={{}}>
+                  <Stack key={`${i}_row`} $horizontal>
                      {objectKeys.map((key, j) => {
                         if (key === 'checkBox') {
                            return (
@@ -88,7 +99,13 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
+                                 style={{
+                                    borderBottom: '1px solid #e0e0e0',
+                                    textAlign: 'center',
+                                    width: fieldWidths[j],
+                                    padding: 5,
+                                    cursor: 'pointer',
+                                 }}
                               >
                                  <input
                                     type="checkbox"
@@ -103,7 +120,13 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
+                                 style={{
+                                    borderBottom: '1px solid #e0e0e0',
+                                    textAlign: 'center',
+                                    width: fieldWidths[j],
+                                    padding: 5,
+                                    cursor: 'pointer',
+                                 }}
                               >
                                  {i + 1}
                               </Stack>
@@ -114,7 +137,14 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                  key={key}
                                  $verticalAlign="center"
                                  $horizontalAlign="center"
-                                 style={{ borderBottom: '1px solid #e0e0e0', textAlign: 'center', width: fieldWidths[j], padding: 5, cursor:'pointer' }}
+                                 style={{
+                                    borderBottom: '1px solid #e0e0e0',
+                                    textAlign: 'center',
+                                    width: fieldWidths[j],
+                                    padding: 5,
+                                    cursor: 'pointer',
+                                    fontSize: columns[j].fontSize
+                                 }}
                                  onDoubleClick={columns[j].editType ? () => onDoubleClick(i, key!, data[key]) : undefined}
                               >
                                  {modifiedContent?.rowNum === i && modifiedContent.columnName === key ? (
@@ -158,6 +188,63 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
       );
    }, [columns, items, checkItemIndexs, modifiedContent]); // eslint-disable-line react-hooks/exhaustive-deps
 
+   const addRow = () => {
+      if (props.isAddRow) {
+         const fieldWidths: any[] = [];
+
+         columns.forEach((element) => {
+            fieldWidths.push(element.width);
+         });
+
+         return (
+            <Stack $horizontal $verticalAlign="center" $horizontalAlign="center" style={{ width: '100%', borderBottom: '1px solid #e0e0e0', }}>
+               {columns.map((value, index) => {
+                  if (value.isInput === false) {
+                     return <Stack key={`add_${value.key}`} style={{ width: fieldWidths[index], padding: 5 }}></Stack>;
+                  } else if (value.key === 'checkBox') {
+                     return (
+                        <Stack
+                           key={`add_${value.key}`}
+                           $horizontal
+                           $horizontalAlign="center"
+                           $verticalAlign="center"
+                           style={{ width: fieldWidths[index], padding: 5, height: '100%', cursor: 'pointer', color: '#5296d5' }}
+                           $styles={{ ':hover': { color: 'green' } }}
+                        >
+                           <FiPlusCircle fontSize={20} onClick={onClickAdd} />
+                        </Stack>
+                     );
+                  } else if (value.key === 'index') {
+                     return (
+                        <Stack
+                           key={`add_${value.key}`}
+                           $horizontal
+                           $horizontalAlign="center"
+                           $verticalAlign="center"
+                           style={{ width: fieldWidths[index], padding: 5, height: '100%', cursor: 'pointer', color: 'red' }}
+                           $styles={{ ':hover': { color: 'green' } }}
+                        >
+                           <FiMinusCircle fontSize={20} onClick={props.setIsCloseAddRow}/>
+                        </Stack>
+                     );
+                  } else {
+                     return (
+                        <Stack key={`add_${value.key}`} style={{ width: fieldWidths[index], padding: 5 }}>
+                           <TextField
+                              placeholder={value.placeholder ? value.placeholder : value.key}
+                              onChange={(event: ChangeEvent<HTMLInputElement>) => onChangeAddRow(value.key, event.currentTarget.value)}
+                           />
+                        </Stack>
+                     );
+                  }
+               })}
+            </Stack>
+         );
+      } else {
+         return undefined;
+      }
+   };
+
    const onChangeCheckItems = (index: number) => {
       let newCheckIndexs: number[] = [...checkItemIndexs];
       if (newCheckIndexs.findIndex((element) => element === index) > -1) {
@@ -192,6 +279,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                </Stack>
             ))}
          </Stack>
+         {props.isAddRow && addRow()}
          {items.length > 0 && list}
       </Stack>
    );

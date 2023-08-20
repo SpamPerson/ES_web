@@ -73,6 +73,9 @@ export interface IColumn {
    width: string;
    fieldName?: string;
    editType?: EditType;
+   isInput?: boolean;
+   placeholder?: string;
+   fontSize?: number | string;
 }
 
 export interface IWord {
@@ -83,6 +86,11 @@ export interface IWord {
    createDate: string;
    isMemorize?: string;
    remarks: string;
+}
+
+export interface IWordCount {
+   totalWord: number;
+   memorizeWord: number;
 }
 
 export interface IDetailsListUpdateContent {
