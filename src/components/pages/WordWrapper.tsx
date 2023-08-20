@@ -11,6 +11,38 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { errorNotification } from '../../utils/notification.utils';
 
+const columns: IColumn[] = [
+   {
+      key: 'enWord',
+      name: '단어',
+      width: '20%',
+      fieldName: 'enWord',
+      editType: EditType.TextField,
+      isInput: true,
+      placeholder: '영단어를 입력해 주세요',
+   },
+   {
+      key: 'krWord',
+      name: '뜻',
+      width: '20%',
+      fieldName: 'krWord',
+      editType: EditType.TextField,
+      isInput: true,
+      placeholder: '뜻을 입력해 주세요',
+   },
+   { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate', isInput: false, fontSize: 15 },
+   { key: 'isMemorize', name: '암기 여부', width: '10%', fieldName: 'isMemorize', editType: EditType.Choice, isInput: false },
+   {
+      key: 'remarks',
+      name: '비고',
+      width: '30%',
+      fieldName: 'remarks',
+      editType: EditType.TextField,
+      isInput: true,
+      placeholder: '비고를 입력해 주세요',
+   },
+];
+
 export const WordWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
    const navigate = useNavigate();
@@ -63,38 +95,6 @@ export const WordWrapper: React.FC = () => {
          setWordCount(countResult.data);
       }
    };
-
-   const columns: IColumn[] = [
-      {
-         key: 'enWord',
-         name: '단어',
-         width: '20%',
-         fieldName: 'enWord',
-         editType: EditType.TextField,
-         isInput: true,
-         placeholder: '영단어를 입력해 주세요',
-      },
-      {
-         key: 'krWord',
-         name: '뜻',
-         width: '20%',
-         fieldName: 'krWord',
-         editType: EditType.TextField,
-         isInput: true,
-         placeholder: '뜻을 입력해 주세요',
-      },
-      { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate', isInput: false, fontSize: 15 },
-      { key: 'isMemorize', name: '암기 여부', width: '10%', fieldName: 'isMemorize', editType: EditType.Choice, isInput: false },
-      {
-         key: 'remarks',
-         name: '비고',
-         width: '30%',
-         fieldName: 'remarks',
-         editType: EditType.TextField,
-         isInput: true,
-         placeholder: '비고를 입력해 주세요',
-      },
-   ];
 
    const onChangeSearchColumn = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSearchColumn(event.currentTarget.value as WordSearchColumn);

@@ -9,6 +9,14 @@ import { AuthenticationContext } from '../contexts/context';
 import { getSentenceList } from '../../services/sentence.request';
 import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
 
+const columns: IColumn[] = [
+    { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
+    { key: 'krSentence', name: '해석', fieldName: 'krSentence', width: '25%', fontSize: 15 },
+    { key: 'createDate', name: '등록일자', fieldName: 'createDate', width: '15%' },
+    { key: 'isMemorize', name: '암기 여부', fieldName: 'isMemorize', width: '15%' },
+    { key: 'remarks', name: '비고', fieldName: 'remarks', width: '20%' },
+ ];
+
 export const SentenceWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
    const [currentPageNum, setCurrentPageNum] = useState<number>(1);
@@ -16,6 +24,7 @@ export const SentenceWrapper: React.FC = () => {
    const [visibleItems, setVisibleItems] = useState<ISentence[]>([]);
    const [searchColumn, setSearchColumn] = useState<SentenceSearchColumn>(SentenceSearchColumn.EnSentence);
    const [searchText, setSearchText] = useState<string>('');
+   const [selectSentences, setSelectSentences] = useState<ISentence[]>([]);
 
    useEffect(() => {
       getItems();
@@ -49,17 +58,20 @@ export const SentenceWrapper: React.FC = () => {
    const onKeydownSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.code === 'Enter') getItems();
    };
+
+   const onSelection = (sentence: ISentence) => {
+      let newSelectItems: ISentence[] = [...selectSentences];
+      if (newSelectItems.findIndex((element) => element.sentenceCode === sentence.sentenceCode) > -1) {
+         newSelectItems = newSelectItems.filter((element) => element.sentenceCode !== sentence.sentenceCode);
+      } else {
+         newSelectItems.push(sentence);
+      }
+      setSelectSentences(newSelectItems);
+   };
+
    const onClickAdd = () => {};
 
    const onClickDelete = () => {};
-
-   const columns: IColumn[] = [
-      { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
-      { key: 'krSentence', name: '해석', fieldName: 'krSentence', width: '25%', fontSize: 15 },
-      { key: 'createDate', name: '등록일자', fieldName: 'createDate', width: '15%' },
-      { key: 'isMemorize', name: '암기 여부', fieldName: 'isMemorize', width: '15%' },
-      { key: 'remarks', name: '비고', fieldName: 'remarks', width: '20%' },
-   ];
 
    return (
       <Stack>
@@ -139,7 +151,7 @@ export const SentenceWrapper: React.FC = () => {
             </Stack>
          </Stack>
          <Stack>
-            <DetailsList columns={columns} items={visibleItems} isCheckBox isIndex />
+            <DetailsList columns={columns} items={visibleItems} selection={onSelection} isCheckBox isIndex />
          </Stack>
          <Stack>
             <Paging currentPageNum={currentPageNum} totalItemsCount={totalItems.length} setCurrentPageNum={setCurrentPageNum} />
