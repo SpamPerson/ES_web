@@ -19,6 +19,7 @@ import { WordWrapper } from '../pages/WordWrapper';
 import { Login } from '../pages/Login';
 import { SignUp } from '../pages/SignUp';
 import { FindPassword } from '../pages/FindPassword';
+import { SentenceWrapper } from '../pages/SentenceWrapper';
 
 interface IContentWrapper {
    children?: React.ReactNode;
@@ -76,8 +77,9 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                <Route path="/findpassword" element={<FindPassword />} />
                {props.authentication && (
                   <>
-                     <Route path="/word" element={<WordWrapper />} />
                      <Route path="/changepassword" element={<ChangePasswordAuth />} />
+                     <Route path="/word" element={<WordWrapper />} />
+                     <Route path="/sentence" element={<SentenceWrapper />} />
                   </>
                )}
             </Routes>

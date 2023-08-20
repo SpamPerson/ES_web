@@ -26,7 +26,7 @@ export const WordWrapper: React.FC = () => {
    useEffect(() => {
       getWordItems();
       getCount();
-   }, [authentication]);
+   }, [authentication]); // eslint-disable-line react-hooks/exhaustive-deps
 
    useEffect(() => {
       if (totalWordItems.length > 0) {
@@ -37,14 +37,14 @@ export const WordWrapper: React.FC = () => {
          setCurrentPageNum(1);
       }
       getCount();
-   }, [totalWordItems]);
+   }, [totalWordItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
    useEffect(() => {
       const startNum = PAGE_ITEM_COUNT * (currentPageNum - 1) + 1;
       const endNum = PAGE_ITEM_COUNT * currentPageNum;
       let newVisibleItems = totalWordItems.slice(startNum - 1, endNum);
       setVisibleItems(newVisibleItems);
-   }, [currentPageNum]);
+   }, [currentPageNum]); // eslint-disable-line react-hooks/exhaustive-deps
 
    const getWordItems = async () => {
       if (authentication) {
@@ -179,11 +179,11 @@ export const WordWrapper: React.FC = () => {
                <PageTitle>단어장</PageTitle>
             </Stack>
             <Stack $horizontalAlign="end" style={{ padding: '5px 40px' }}>
-               <Stack $horizontal>
-                  <span>총 등록 단어 :</span>
+               <Stack $horizontal $childrenGap={5} style={{ padding: '0 5px' }}>
+                  <span>등록 단어 :</span>
                   {wordCount?.totalWord}
                </Stack>
-               <Stack $horizontal>
+               <Stack $horizontal $childrenGap={5} style={{ padding: '0 5px' }}>
                   <span>암기 단어 :</span>
                   {wordCount?.memorizeWord}
                </Stack>

@@ -67,6 +67,12 @@ export const enum WordSearchColumn {
    Remarks = 'remarks',
 }
 
+export const enum SentenceSearchColumn {
+   EnSentence = 'enSentence',
+   KrSentence = 'krSentence',
+   Remarks = 'remarks',
+}
+
 export interface IColumn {
    key: string;
    name: string;
@@ -91,6 +97,16 @@ export interface IWord {
 export interface IWordCount {
    totalWord: number;
    memorizeWord: number;
+}
+
+export interface ISentence {
+   sentenceCode?: number;
+   userId: string;
+   enSentence: string;
+   krSentence: string;
+   createDate: string;
+   isMemorize?: string;
+   remarks?: string;
 }
 
 export interface IDetailsListUpdateContent {
