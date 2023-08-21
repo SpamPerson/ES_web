@@ -99,6 +99,11 @@ export interface IWordCount {
    memorizeWord: number;
 }
 
+export interface ISentenceCount {
+   totalSentence: number;
+   memorizeSentence: number;
+}
+
 export interface ISentence {
    sentenceCode?: number;
    userId: string;

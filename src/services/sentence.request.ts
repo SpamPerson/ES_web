@@ -10,3 +10,11 @@ export const getSentenceList = async (authentication: IAuthentication, searchCol
       throw err;
    }
 };
+
+export const getSentenceCount = async (authentication: IAuthentication) => {
+   try {
+      return await httpGet('sentence/count', authentication);
+   } catch(err){
+      throw err;
+   }
+}

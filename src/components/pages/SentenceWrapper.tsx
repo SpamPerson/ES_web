@@ -2,11 +2,11 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { TfiPencilAlt } from 'react-icons/tfi';
 import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
 import { DetailsList } from '../controls/DetailsList';
-import { IColumn, ISentence, SentenceSearchColumn } from '../types';
+import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../types';
 import { Paging } from '../controls/Paging';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthenticationContext } from '../contexts/context';
-import { getSentenceList } from '../../services/sentence.request';
+import { getSentenceCount, getSentenceList } from '../../services/sentence.request';
 import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
 
 const columns: IColumn[] = [
@@ -25,9 +25,11 @@ export const SentenceWrapper: React.FC = () => {
    const [searchColumn, setSearchColumn] = useState<SentenceSearchColumn>(SentenceSearchColumn.EnSentence);
    const [searchText, setSearchText] = useState<string>('');
    const [selectSentences, setSelectSentences] = useState<ISentence[]>([]);
+   const [sentenceCount,setSentenceCount] = useState<ISentenceCount>();
 
    useEffect(() => {
       getItems();
+      getCount();
    }, []);
 
    useEffect(() => {
@@ -46,6 +48,13 @@ export const SentenceWrapper: React.FC = () => {
          setTotalItems(result.data);
       }
    };
+
+   const getCount = async () => {
+      const result = await getSentenceCount(authentication!);
+      if(result.isSuccess) {
+         setSentenceCount(result.data);
+      }
+   }
 
    const onChangeSearchText = (event: ChangeEvent<HTMLInputElement>) => {
       setSearchText(event.currentTarget.value);
@@ -81,11 +90,11 @@ export const SentenceWrapper: React.FC = () => {
          <Stack $horizontalAlign="end" style={{ padding: '5px 40px' }}>
             <Stack $horizontal>
                <span>등록 문장 :</span>
-               {0}
+               {sentenceCount ? sentenceCount.totalSentence : 0}
             </Stack>
             <Stack $horizontal>
                <span>암기 문장 :</span>
-               {0}
+               {sentenceCount ? sentenceCount.memorizeSentence : 0}
             </Stack>
          </Stack>
          <Stack $horizontal $horizontalAlign="space-between" $verticalAlign="center" style={{ padding: '0 40px' }}>
