@@ -1,6 +1,6 @@
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { TfiPencilAlt } from 'react-icons/tfi';
-import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
+import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
 import { DetailsList } from '../controls/DetailsList';
 import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../types';
 import { Paging } from '../controls/Paging';
@@ -8,14 +8,16 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthenticationContext } from '../contexts/context';
 import { getSentenceCount, getSentenceList } from '../../services/sentence.request';
 import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
+import { Modal } from '../controls/Modal';
+import { Dialog } from '../controls/Dialog';
 
 const columns: IColumn[] = [
-    { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
-    { key: 'krSentence', name: '해석', fieldName: 'krSentence', width: '25%', fontSize: 15 },
-    { key: 'createDate', name: '등록일자', fieldName: 'createDate', width: '15%' },
-    { key: 'isMemorize', name: '암기 여부', fieldName: 'isMemorize', width: '15%' },
-    { key: 'remarks', name: '비고', fieldName: 'remarks', width: '20%' },
- ];
+   { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
+   { key: 'krSentence', name: '해석', fieldName: 'krSentence', width: '25%', fontSize: 15 },
+   { key: 'createDate', name: '등록일자', fieldName: 'createDate', width: '15%' },
+   { key: 'isMemorize', name: '암기 여부', fieldName: 'isMemorize', width: '15%' },
+   { key: 'remarks', name: '비고', fieldName: 'remarks', width: '20%' },
+];
 
 export const SentenceWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
@@ -25,12 +27,14 @@ export const SentenceWrapper: React.FC = () => {
    const [searchColumn, setSearchColumn] = useState<SentenceSearchColumn>(SentenceSearchColumn.EnSentence);
    const [searchText, setSearchText] = useState<string>('');
    const [selectSentences, setSelectSentences] = useState<ISentence[]>([]);
-   const [sentenceCount,setSentenceCount] = useState<ISentenceCount>();
+   const [sentenceCount, setSentenceCount] = useState<ISentenceCount>();
+   const [isSentenceAddModal, setIsSentenceAddModal] = useState<boolean>(false);
+   const [isOpenDeleteDialog, setIsDeleteDialog] = useState<boolean>(false);
 
    useEffect(() => {
       getItems();
       getCount();
-   }, []);
+   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
    useEffect(() => {
       if (totalItems.length > 0) {
@@ -51,10 +55,10 @@ export const SentenceWrapper: React.FC = () => {
 
    const getCount = async () => {
       const result = await getSentenceCount(authentication!);
-      if(result.isSuccess) {
+      if (result.isSuccess) {
          setSentenceCount(result.data);
       }
-   }
+   };
 
    const onChangeSearchText = (event: ChangeEvent<HTMLInputElement>) => {
       setSearchText(event.currentTarget.value);
@@ -78,9 +82,17 @@ export const SentenceWrapper: React.FC = () => {
       setSelectSentences(newSelectItems);
    };
 
-   const onClickAdd = () => {};
+   const onClickDelete = () => {
+      if (selectSentences.length > 0) {
+      }
+   };
 
-   const onClickDelete = () => {};
+   const onClickUpdate = () => {
+      if (selectSentences.length === 1) {
+      }
+   };
+
+   const onClickSaveSentence = () => {};
 
    return (
       <Stack>
@@ -103,7 +115,7 @@ export const SentenceWrapper: React.FC = () => {
                   $horizontal
                   $verticalAlign="center"
                   $childrenGap={5}
-                  onClick={onClickAdd}
+                  onClick={() => setIsSentenceAddModal(true)}
                   style={{ cursor: 'pointer', userSelect: 'none' }}
                   $styles={{
                      '&:hover': {
@@ -118,30 +130,30 @@ export const SentenceWrapper: React.FC = () => {
                   $horizontal
                   $verticalAlign="center"
                   $childrenGap={5}
-                  onClick={onClickDelete}
-                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={()=>setIsDeleteDialog(true)}
+                  style={{ cursor: 'pointer', userSelect: 'none', color: selectSentences.length === 0 ? '#e0e0e0' : undefined }}
                   $styles={{
                      '&:hover': {
                         color: 'red',
                      },
                   }}
                >
-                  <FiTrash2 color={'red'} />
+                  <FiTrash2 color={selectSentences.length === 0 ? '#e0e0e0' : 'red'} />
                   <span>삭제</span>
                </Stack>
                <Stack
                   $horizontal
                   $verticalAlign="center"
                   $childrenGap={5}
-                  onClick={onClickDelete}
-                  style={{ cursor: 'pointer', userSelect: 'none' }}
+                  onClick={onClickUpdate}
+                  style={{ cursor: 'pointer', userSelect: 'none', color: selectSentences.length === 1 ? undefined : '#e0e0e0' }}
                   $styles={{
                      '&:hover': {
-                        color: 'red',
+                        color: 'green',
                      },
                   }}
                >
-                  <TfiPencilAlt color={'green'} />
+                  <TfiPencilAlt color={selectSentences.length === 1 ? 'green' : '#e0e0e0'} />
                   <span>수정</span>
                </Stack>
             </Stack>
@@ -165,6 +177,26 @@ export const SentenceWrapper: React.FC = () => {
          <Stack>
             <Paging currentPageNum={currentPageNum} totalItemsCount={totalItems.length} setCurrentPageNum={setCurrentPageNum} />
          </Stack>
+         <Modal isOpen={isSentenceAddModal} onDismiss={() => setIsSentenceAddModal(false)} width="50%" height="90%">
+            <Stack
+               $verticalAlign="center"
+               $horizontalAlign="end"
+               style={{ height: 32, backgroundColor: 'rgb(52, 152, 219)', padding: '0 5px' }}
+            ></Stack>
+            <Stack style={{ width: '100%', height: '100%' }}>1</Stack>
+            <Stack $horizontal $horizontalAlign="end" $verticalAlign="center" $childrenGap={10} style={{ padding: 10 }}>
+               <StackItem style={{ minWidth: 100 }}>
+                  <PrimaryButton onClick={onClickSaveSentence}>저장</PrimaryButton>
+               </StackItem>
+               <StackItem style={{ minWidth: 100 }}>
+                  <DefaultButton onClick={() => setIsSentenceAddModal(false)}>닫기</DefaultButton>
+               </StackItem>
+            </Stack>
+         </Modal>
+         <Dialog isOpen={isOpenDeleteDialog} title="영문장 삭제" subText="영문장을 삭제 하시겠습니까?">
+            <PrimaryButton onClick={onClickDelete}>삭제</PrimaryButton>
+            <DefaultButton onClick={() => setIsDeleteDialog(false)}>취소</DefaultButton>
+         </Dialog>
       </Stack>
    );
 };

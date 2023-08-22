@@ -67,4 +67,8 @@
   + Made Sentence Wrapper component.
   + Made Search Sentence List.
   + Made Select Sentence Feature.
++ 2023-08-22
+  + Fixed Authentication bug When init Render by refreshToken.
+  + Made Dialog Common component.
+  + Made Modal Common component.
   

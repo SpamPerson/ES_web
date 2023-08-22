@@ -194,9 +194,10 @@ export const LoginButton = styled.button`
 `;
 
 export const DefaultButton = styled.button`
-   border: none;
+   border: 1px solid #e0e0e0;
    background-color: #ffffff;
-   height: 48px;
+   width: 100%;
+   height: 40px;
    border-radius: 5px;
    padding: 10px;
    text-align: center;
@@ -218,6 +219,7 @@ export const PrimaryButton = styled.button`
    font-weight: 700;
    border-radius: 3px;
    user-select: none;
+   padding: 10px;
    &:hover {
       background-color: #e0e0e0;
    }
