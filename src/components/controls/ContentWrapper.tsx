@@ -70,7 +70,7 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
          )}
          <Stack style={{ height: 'calc(100vh - 60px)', overflowY: 'auto' }}>
             <Routes>
-               {/* <Route path="*" element={<Navigate to={'/login'} />} /> */}
+               <Route path="*" element={<Navigate to={'/login'} />} />
                <Route path="" element={<Home />} />
                <Route path="/login" element={<Login />} />
                <Route path="/signup" element={<SignUp />} />
