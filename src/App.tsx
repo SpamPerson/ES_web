@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import {
    getAccessToken,
@@ -15,40 +15,48 @@ import { AuthenticationProvider } from './components/contexts/providers/Authenti
 import { IAuthentication } from './components/types';
 
 const App = () => {
-   const [authentication] = useState<IAuthentication | undefined>(() => {
+   const [authentication, setAuthentication] = useState<IAuthentication | undefined>(() => {
+      let accessToken = getAccessToken();
+      let userInfo = getSessionStorageUserInfo();
+      if (accessToken && userInfo) {
+         return { accessToken: accessToken.token, expireDate: accessToken.expireDate, user: userInfo };
+      }
+   });
+
+   useEffect(() => {
       let refreshToken = getRefreshToken();
       let accessToken = getAccessToken();
       let userInfo = getSessionStorageUserInfo();
+
       if (!accessToken) {
          if (refreshToken) {
-            reconnect(refreshToken).then((response) => {
+            reconnect(refreshToken).then(async (response) => {
                if (response?.data) {
                   setRefreshToken(response.data.refreshToken, response.data.refreshTokenExpireTime);
                   setSessionStorageUserInfo(response.data.user);
                   setAccessToken(response.data.accessToken, dayjs().add(response.data.accessTokenExpireTime, 'millisecond').toDate());
-                  return {
+                  setAuthentication({
                      accessToken: response.data.accessToken,
                      expireDate: dayjs().add(response.data.accessTokenExpireTime, 'millisecond').toDate(),
                      user: response.data.user,
-                  };
+                  });
                }
             });
          }
       } else {
          if (userInfo) {
-            return { accessToken: accessToken.token, expireDate: accessToken.expireDate, user: userInfo };
+            setAuthentication({ accessToken: accessToken.token, expireDate: accessToken.expireDate, user: userInfo });
          } else {
             getUserInfo().then((response) => {
                if (response.isSuccess) {
                   userInfo = response.data;
                   setSessionStorageUserInfo(userInfo!);
-                  return { accessToken: accessToken?.token, expireDate: accessToken?.expireDate, user: userInfo! };
+                  setAuthentication({ accessToken: accessToken?.token!, expireDate: accessToken?.expireDate!, user: userInfo! });
                }
             });
          }
       }
-      return undefined;
-   });
+   }, []);
 
    return (
       <div className="App">
