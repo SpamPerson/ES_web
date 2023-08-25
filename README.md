@@ -71,4 +71,9 @@
   + Fixed Authentication bug When init Render by refreshToken.
   + Made Dialog Common component.
   + Made Modal Common component.
++ 2023-08-25
+  + Fixed DetailsList common component.
+  + Made Sentence Add Feature.
+  + Made Sentence Delete Feature.
+  + Added Modal dismmiss Feature by Keyboard press.
   

@@ -7,18 +7,31 @@ interface PDetailsList {
    columns: IColumn[];
    items: Items;
    isAddRow?: boolean;
-   isCheckBox: boolean;
+   isCheckBox: true;
    isIndex?: boolean;
+   selectedItems: any;
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
    onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
    setAddItem?: (item: any) => void;
 }
 
-export const DetailsList: React.FC<PDetailsList> = (props) => {
+interface PDetailsListCheckBox {
+   columns: IColumn[];
+   items: Items;
+   isAddRow?: boolean;
+   isCheckBox: false;
+   isIndex?: boolean;
+   selectedItems?: any;
+   setIsCloseAddRow?: () => void;
+   selection?: (items: any) => void;
+   onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
+   setAddItem?: (item: any) => void;
+}
+
+export const DetailsList: React.FC<PDetailsList | PDetailsListCheckBox> = (props) => {
    const [columns, setColumns] = useState<IColumn[]>([]);
    const [items, setItems] = useState<Items>([]);
-   const [checkItemIndexs, setCheckItemIndexs] = useState<number[]>([]);
    const [modifiedContent, setModifiedContent] = useState<IDetailsListUpdateContent>();
    const [changeTextField, setChangeTextField] = useState<string>('');
    const [addItem, setAddItem] = useState<any>();
@@ -109,7 +122,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                               >
                                  <input
                                     type="checkbox"
-                                    checked={checkItemIndexs.findIndex((element) => element === i) > -1}
+                                    checked={props.selectedItems?.findIndex((element: any) => element === items[i]) > -1}
                                     onChange={() => onChangeCheckItems(i)}
                                  />
                               </Stack>
@@ -143,7 +156,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                                     width: fieldWidths[j],
                                     padding: 5,
                                     cursor: 'pointer',
-                                    fontSize: columns[j].fontSize
+                                    fontSize: columns[j].fontSize,
                                  }}
                                  onDoubleClick={columns[j].editType ? () => onDoubleClick(i, key!, data[key]) : undefined}
                               >
@@ -186,7 +199,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
             })}
          </Stack>
       );
-   }, [columns, items, checkItemIndexs, modifiedContent]); // eslint-disable-line react-hooks/exhaustive-deps
+   }, [columns, items, modifiedContent, props.selectedItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
    const addRow = () => {
       if (props.isAddRow) {
@@ -197,7 +210,12 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
          });
 
          return (
-            <Stack $horizontal $verticalAlign="center" $horizontalAlign="center" style={{ width: '100%', borderBottom: '1px solid #e0e0e0', }}>
+            <Stack
+               $horizontal
+               $verticalAlign="center"
+               $horizontalAlign="center"
+               style={{ width: '100%', borderBottom: '1px solid #e0e0e0' }}
+            >
                {columns.map((value, index) => {
                   if (value.isInput === false) {
                      return <Stack key={`add_${value.key}`} style={{ width: fieldWidths[index], padding: 5 }}></Stack>;
@@ -224,7 +242,7 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
                            style={{ width: fieldWidths[index], padding: 5, height: '100%', cursor: 'pointer', color: 'red' }}
                            $styles={{ ':hover': { color: 'green' } }}
                         >
-                           <FiMinusCircle fontSize={20} onClick={props.setIsCloseAddRow}/>
+                           <FiMinusCircle fontSize={20} onClick={props.setIsCloseAddRow} />
                         </Stack>
                      );
                   } else {
@@ -246,13 +264,6 @@ export const DetailsList: React.FC<PDetailsList> = (props) => {
    };
 
    const onChangeCheckItems = (index: number) => {
-      let newCheckIndexs: number[] = [...checkItemIndexs];
-      if (newCheckIndexs.findIndex((element) => element === index) > -1) {
-         newCheckIndexs = newCheckIndexs.filter((element) => element !== index);
-      } else {
-         newCheckIndexs.push(index);
-      }
-      setCheckItemIndexs(newCheckIndexs);
       props.selection!(items[index]);
    };
 

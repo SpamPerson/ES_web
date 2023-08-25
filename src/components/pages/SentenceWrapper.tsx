@@ -1,15 +1,17 @@
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { TfiPencilAlt } from 'react-icons/tfi';
-import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
+import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField, Textarea } from '../styled.components';
 import { DetailsList } from '../controls/DetailsList';
 import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../types';
 import { Paging } from '../controls/Paging';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthenticationContext } from '../contexts/context';
-import { getSentenceCount, getSentenceList } from '../../services/sentence.request';
+import { deleteSentence, getSentenceCount, getSentenceList, saveSentence } from '../../services/sentence.request';
 import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
 import { Modal } from '../controls/Modal';
 import { Dialog } from '../controls/Dialog';
+import dayjs from 'dayjs';
+import { warningNotification } from '../../utils/notification.utils';
 
 const columns: IColumn[] = [
    { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
@@ -30,11 +32,21 @@ export const SentenceWrapper: React.FC = () => {
    const [sentenceCount, setSentenceCount] = useState<ISentenceCount>();
    const [isSentenceAddModal, setIsSentenceAddModal] = useState<boolean>(false);
    const [isOpenDeleteDialog, setIsDeleteDialog] = useState<boolean>(false);
+   const [enSentence, setEnSentence] = useState<string>('');
+   const [krSentence, setKrSentence] = useState<string>('');
+   const [isMemorize, setMemorize] = useState<string>('Y');
+   const [remarks, setRemarks] = useState<string>('');
 
    useEffect(() => {
       getItems();
       getCount();
    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+   useEffect(() => {
+      if (!isSentenceAddModal) {
+         resetAddModalState();
+      }
+   }, [isSentenceAddModal]);
 
    useEffect(() => {
       if (totalItems.length > 0) {
@@ -82,8 +94,34 @@ export const SentenceWrapper: React.FC = () => {
       setSelectSentences(newSelectItems);
    };
 
-   const onClickDelete = () => {
+   const onChangeEnSentence = (event: ChangeEvent<HTMLInputElement>) => {
+      setEnSentence(event.currentTarget.value);
+   };
+
+   const onChangeKrSentence = (event: ChangeEvent<HTMLInputElement>) => {
+      setKrSentence(event.currentTarget.value);
+   };
+
+   const onChangeMemorize = (event: ChangeEvent<HTMLSelectElement>) => {
+      setMemorize(event.currentTarget.value);
+   };
+
+   const onChangeRemarks = (event: ChangeEvent<HTMLTextAreaElement>) => {
+      setRemarks(event.currentTarget.value);
+   };
+
+   const onClickDelete = async () => {
       if (selectSentences.length > 0) {
+         let newTotalItems: ISentence[] = [...totalItems];
+         const result = await deleteSentence(authentication!, selectSentences);
+         if (result.isSuccess) {
+            selectSentences.forEach((sentence) => {
+               newTotalItems = newTotalItems.filter((element) => element.sentenceCode !== sentence.sentenceCode);
+            });
+            setTotalItems(newTotalItems);
+            setIsDeleteDialog(false);
+         }
+         setSelectSentences([]);
       }
    };
 
@@ -92,7 +130,41 @@ export const SentenceWrapper: React.FC = () => {
       }
    };
 
-   const onClickSaveSentence = () => {};
+   const onClickSaveSentence = async () => {
+      if (enSentence === '') {
+         warningNotification('영문장을 입력해주세요!');
+      } else if (krSentence === '') {
+         warningNotification('해석을 입력해 주세요');
+      } else {
+         const result = await saveSentence(authentication!, {
+            userId: authentication?.user.userId!,
+            enSentence: enSentence,
+            krSentence: krSentence,
+            isMemorize: isMemorize,
+            remarks: remarks,
+            createDate: dayjs().format('YYYY-MM-DD'),
+         });
+         if (result.isSuccess) {
+            let newTotalItems: ISentence[] = [...totalItems];
+            if (newTotalItems.findIndex((element) => element.sentenceCode === result.data.sentenceCode) === -1) {
+               newTotalItems.push(result.data);
+            }
+            setTotalItems(newTotalItems);
+            setIsSentenceAddModal(false);
+         }
+      }
+   };
+
+   const resetAddModalState = () => {
+      setEnSentence('');
+      setKrSentence('');
+      setMemorize('Y');
+      setRemarks('');
+   };
+
+   const onKeyDownAddSentence = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.code === 'Enter') onClickSaveSentence();
+   };
 
    return (
       <Stack>
@@ -130,7 +202,9 @@ export const SentenceWrapper: React.FC = () => {
                   $horizontal
                   $verticalAlign="center"
                   $childrenGap={5}
-                  onClick={()=>setIsDeleteDialog(true)}
+                  onClick={() => {
+                     if (selectSentences.length !== 0) setIsDeleteDialog(true);
+                  }}
                   style={{ cursor: 'pointer', userSelect: 'none', color: selectSentences.length === 0 ? '#e0e0e0' : undefined }}
                   $styles={{
                      '&:hover': {
@@ -172,18 +246,40 @@ export const SentenceWrapper: React.FC = () => {
             </Stack>
          </Stack>
          <Stack>
-            <DetailsList columns={columns} items={visibleItems} selection={onSelection} isCheckBox isIndex />
+            <DetailsList
+               columns={columns}
+               items={visibleItems}
+               selection={onSelection}
+               selectedItems={selectSentences}
+               isCheckBox
+               isIndex
+            />
          </Stack>
          <Stack>
             <Paging currentPageNum={currentPageNum} totalItemsCount={totalItems.length} setCurrentPageNum={setCurrentPageNum} />
          </Stack>
-         <Modal isOpen={isSentenceAddModal} onDismiss={() => setIsSentenceAddModal(false)} width="50%" height="90%">
+
+         <Modal isOpen={isSentenceAddModal} onDismiss={() => setIsSentenceAddModal(false)} width="50%" height="50%">
             <Stack
                $verticalAlign="center"
                $horizontalAlign="end"
                style={{ height: 32, backgroundColor: 'rgb(52, 152, 219)', padding: '0 5px' }}
             ></Stack>
-            <Stack style={{ width: '100%', height: '100%' }}>1</Stack>
+            <Stack
+               $horizontalAlign="center"
+               $verticalAlign="center"
+               $childrenGap={10}
+               style={{ width: '100%', height: '100%', padding: 20 }}
+               onKeyDown={onKeyDownAddSentence}
+            >
+               <TextField placeholder="영문장" value={enSentence} onChange={onChangeEnSentence} autoFocus />
+               <TextField placeholder="해석" value={krSentence} onChange={onChangeKrSentence} />
+               <Dropdown defaultValue={isMemorize} onChange={onChangeMemorize}>
+                  <option value={'Y'}>Y</option>
+                  <option value={'N'}>N</option>
+               </Dropdown>
+               <Textarea value={remarks} onChange={onChangeRemarks} />
+            </Stack>
             <Stack $horizontal $horizontalAlign="end" $verticalAlign="center" $childrenGap={10} style={{ padding: 10 }}>
                <StackItem style={{ minWidth: 100 }}>
                   <PrimaryButton onClick={onClickSaveSentence}>저장</PrimaryButton>

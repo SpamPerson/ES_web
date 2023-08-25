@@ -26,6 +26,10 @@ export interface INavLoginLink {
    $right?: number;
 }
 
+export interface ITextarea {
+   $resize?: boolean;
+}
+
 export interface IPenal {
    $position?: PenalPositionType;
 }
@@ -236,6 +240,29 @@ export const TextField = styled.input`
       outline: none;
       border-color: darkblue;
    }
+`;
+
+export const Textarea = styled.textarea<ITextarea>`
+   ${(props) => {
+      let resize: string | undefined;
+
+      if (!props.$resize) {
+         resize = `resize: none;`;
+      }
+
+      return css`
+         width: 100%;
+         height: 100%;
+         border: 1px solid #e0e0e0;
+         border-radius: 5px;
+         padding: 5px;
+         &:focus-visible {
+            outline: none;
+            border-color: darkblue;
+         }
+         ${resize}
+      `;
+   }}
 `;
 
 export const Dropdown = styled.select`

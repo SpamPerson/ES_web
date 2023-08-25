@@ -244,14 +244,15 @@ export const WordWrapper: React.FC = () => {
                <DetailsList
                   columns={columns}
                   items={visibleItems}
-                  isCheckBox
                   selection={onSelection}
+                  selectedItems={selectItems}
                   onChangeValue={onChangeValue}
-                  isIndex
                   isAddRow={isAddRow}
                   setIsCloseAddRow={() => setIsAddRow(false)}
                   setAddItem={setAddItem}
-               />
+                  isCheckBox
+                  isIndex
+                  />
             </Stack>
             <Stack>
                <Paging currentPageNum={currentPageNum} totalItemsCount={totalWordItems.length} setCurrentPageNum={setCurrentPageNum} />

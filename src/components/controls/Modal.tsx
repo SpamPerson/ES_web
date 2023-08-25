@@ -9,6 +9,11 @@ interface PModal {
 }
 
 export const Modal: React.FC<PModal> = (props) => {
+
+   const onkeyDownClose = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.code === 'Escape') props.onDismiss!();
+   };
+
    return (
       <>
          {props.isOpen && (
@@ -39,6 +44,7 @@ export const Modal: React.FC<PModal> = (props) => {
                      transform: 'translate(-50%, -50%)',
                      zIndex: 10000001,
                   }}
+                  onKeyDown={onkeyDownClose}
                >
                   {props.children}
                </Stack>
