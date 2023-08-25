@@ -250,9 +250,17 @@ export const WordWrapper: React.FC = () => {
                   isAddRow={isAddRow}
                   setIsCloseAddRow={() => setIsAddRow(false)}
                   setAddItem={setAddItem}
+                  setAllCheck={(isAllCheck) => {
+                     if (isAllCheck) {
+                        setSelectItems(visibleItems);
+                     } else {
+                        setSelectItems([]);
+                     }
+                  }}
+                  isVisibleAllSelect
                   isCheckBox
                   isIndex
-                  />
+               />
             </Stack>
             <Stack>
                <Paging currentPageNum={currentPageNum} totalItemsCount={totalWordItems.length} setCurrentPageNum={setCurrentPageNum} />

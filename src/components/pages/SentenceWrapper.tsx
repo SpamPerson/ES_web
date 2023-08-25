@@ -4,7 +4,7 @@ import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, Te
 import { DetailsList } from '../controls/DetailsList';
 import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../types';
 import { Paging } from '../controls/Paging';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { AuthenticationContext } from '../contexts/context';
 import { deleteSentence, getSentenceCount, getSentenceList, saveSentence } from '../../services/sentence.request';
 import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
@@ -36,6 +36,8 @@ export const SentenceWrapper: React.FC = () => {
    const [krSentence, setKrSentence] = useState<string>('');
    const [isMemorize, setMemorize] = useState<string>('Y');
    const [remarks, setRemarks] = useState<string>('');
+   const enSentenceInputRef = useRef<HTMLInputElement>(null);
+   const krSentenceInputRef = useRef<HTMLInputElement>(null);
 
    useEffect(() => {
       getItems();
@@ -91,6 +93,7 @@ export const SentenceWrapper: React.FC = () => {
       } else {
          newSelectItems.push(sentence);
       }
+      if (sentence.sentenceCode === -1) console.log(sentence);
       setSelectSentences(newSelectItems);
    };
 
@@ -129,12 +132,19 @@ export const SentenceWrapper: React.FC = () => {
       if (selectSentences.length === 1) {
       }
    };
-
+   console.log(enSentence);
    const onClickSaveSentence = async () => {
+      const korReg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
       if (enSentence === '') {
          warningNotification('영문장을 입력해주세요!');
+         enSentenceInputRef.current?.focus();
+      } else if (korReg.test(enSentence)) {
+         warningNotification('영문장은 한글이 포함 될수 없습니다.');
+         enSentenceInputRef.current?.value.replace(korReg, '');
+         enSentenceInputRef.current?.focus();
       } else if (krSentence === '') {
          warningNotification('해석을 입력해 주세요');
+         krSentenceInputRef.current?.focus();
       } else {
          const result = await saveSentence(authentication!, {
             userId: authentication?.user.userId!,
@@ -251,6 +261,14 @@ export const SentenceWrapper: React.FC = () => {
                items={visibleItems}
                selection={onSelection}
                selectedItems={selectSentences}
+               setAllCheck={(isAllCheck) => {
+                  if (isAllCheck) {
+                     setSelectSentences(visibleItems);
+                  } else {
+                     setSelectSentences([]);
+                  }
+               }}
+               isVisibleAllSelect
                isCheckBox
                isIndex
             />
@@ -272,8 +290,8 @@ export const SentenceWrapper: React.FC = () => {
                style={{ width: '100%', height: '100%', padding: 20 }}
                onKeyDown={onKeyDownAddSentence}
             >
-               <TextField placeholder="영문장" value={enSentence} onChange={onChangeEnSentence} autoFocus />
-               <TextField placeholder="해석" value={krSentence} onChange={onChangeKrSentence} />
+               <TextField ref={enSentenceInputRef} placeholder="영문장" value={enSentence} onChange={onChangeEnSentence} autoFocus />
+               <TextField ref={krSentenceInputRef} placeholder="해석" value={krSentence} onChange={onChangeKrSentence} />
                <Dropdown defaultValue={isMemorize} onChange={onChangeMemorize}>
                   <option value={'Y'}>Y</option>
                   <option value={'N'}>N</option>

@@ -10,6 +10,8 @@ interface PDetailsList {
    isCheckBox: true;
    isIndex?: boolean;
    selectedItems: any;
+   isVisibleAllSelect?: boolean;
+   setAllCheck?: (isAllCheck: boolean) => void;
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
    onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
@@ -23,6 +25,8 @@ interface PDetailsListCheckBox {
    isCheckBox: false;
    isIndex?: boolean;
    selectedItems?: any;
+   isVisibleAllSelect?: boolean;
+   setAllCheck?: (isAllCheck: boolean) => void;
    setIsCloseAddRow?: () => void;
    selection?: (items: any) => void;
    onChangeValue?: (contentInfo: IDetailsListUpdateContent, chageValue: string) => void;
@@ -35,6 +39,7 @@ export const DetailsList: React.FC<PDetailsList | PDetailsListCheckBox> = (props
    const [modifiedContent, setModifiedContent] = useState<IDetailsListUpdateContent>();
    const [changeTextField, setChangeTextField] = useState<string>('');
    const [addItem, setAddItem] = useState<any>();
+   const [isAllCheck, setIsAllCheck] = useState<boolean>(false);
 
    useEffect(() => {
       let newColumns: IColumn[] = [];
@@ -50,7 +55,13 @@ export const DetailsList: React.FC<PDetailsList | PDetailsListCheckBox> = (props
       newColumns.push(...props.columns);
       setColumns(newColumns);
       setItems(newItems);
-   }, [props]);
+   }, [props.isIndex, props.isCheckBox, props.items, props.columns]);
+
+   useEffect(() => {
+      if (props.selectedItems.length !== items.length) {
+         setIsAllCheck(false);
+      }
+   }, [props.selectedItems, items]);
 
    const onBlurChangeTextField = (value: string) => {
       props.onChangeValue!(modifiedContent!, value);
@@ -272,23 +283,60 @@ export const DetailsList: React.FC<PDetailsList | PDetailsListCheckBox> = (props
       setModifiedContent({ rowNum: rowNum, columnName: key });
    };
 
+   const onChangeAllCheck = () => {
+      setIsAllCheck(!isAllCheck);
+      props.setAllCheck!(!isAllCheck);
+   };
+
    return (
       <Stack style={{ padding: '10px 40px' }}>
          <Stack $horizontal style={{ border: '1px solid #e0e0e0', backgroundColor: '#e0e0e0', userSelect: 'none' }}>
-            {columns.map((value, index) => (
-               <Stack
-                  $verticalAlign="center"
-                  key={value.key}
-                  style={{
-                     width: value.width,
-                     textAlign: 'center',
-                     fontWeight: 'bold',
-                     padding: 5,
-                  }}
-               >
-                  {value.name}
-               </Stack>
-            ))}
+            {columns.map((value, index) => {
+               if (props.isVisibleAllSelect) {
+                  return value.key === 'checkBox' ? (
+                     <Stack
+                        $verticalAlign="center"
+                        key={value.key}
+                        style={{
+                           width: value.width,
+                           textAlign: 'center',
+                           fontWeight: 'bold',
+                           padding: 5,
+                        }}
+                     >
+                        <input type="checkbox" checked={isAllCheck} onChange={onChangeAllCheck} />
+                     </Stack>
+                  ) : (
+                     <Stack
+                        $verticalAlign="center"
+                        key={value.key}
+                        style={{
+                           width: value.width,
+                           textAlign: 'center',
+                           fontWeight: 'bold',
+                           padding: 5,
+                        }}
+                     >
+                        {value.name}
+                     </Stack>
+                  );
+               } else {
+                  return (
+                     <Stack
+                        $verticalAlign="center"
+                        key={value.key}
+                        style={{
+                           width: value.width,
+                           textAlign: 'center',
+                           fontWeight: 'bold',
+                           padding: 5,
+                        }}
+                     >
+                        {value.name}
+                     </Stack>
+                  );
+               }
+            })}
          </Stack>
          {props.isAddRow && addRow()}
          {items.length > 0 && list}

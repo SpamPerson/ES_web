@@ -72,8 +72,9 @@
   + Made Dialog Common component.
   + Made Modal Common component.
 + 2023-08-25
-  + Fixed DetailsList common component.
+  + Fixed DetailsList Checkbox bug.
   + Made Sentence Add Feature.
   + Made Sentence Delete Feature.
   + Added Modal dismmiss Feature by Keyboard press.
+  + Added DetailsList all select Feature.
   
