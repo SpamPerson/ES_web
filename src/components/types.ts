@@ -52,7 +52,7 @@ export const enum MenuType {
    Word = 'word',
    Sentence = 'sentence',
    Ai = 'ai',
-   UserManager = 'userManager',
+   UserManager = 'admin',
 }
 
 export const enum DetailsListEdit {

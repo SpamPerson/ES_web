@@ -22,6 +22,7 @@ import { SignUp } from '../SignUp';
 import { FindPassword } from '../FindPassword';
 import 'react-toastify/dist/ReactToastify.css';
 import { AiWrapper } from '../../ai/AiWrapper';
+import { AdminWrapper } from '../../admin/AdminWrapper';
 
 interface IContentWrapper {
    children?: React.ReactNode;
@@ -83,6 +84,9 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                      <Route path="/word" element={<WordWrapper />} />
                      <Route path="/sentence" element={<SentenceWrapper />} />
                      <Route path="/ai" element={<AiWrapper />} />
+                     {props.authentication.user.roles?.findIndex((element) => element.name === 'ROLE_ADMIN')! > -1 && (
+                        <Route path="/admin" element={<AdminWrapper />} />
+                     )}
                   </>
                )}
             </Routes>
