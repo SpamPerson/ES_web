@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 import { Stack, TextField } from '../../../styled.components';
-import { EditType, IColumn, IDetailsListUpdateContent, Items } from '../../../types';
+import { DetailsListEdit, IColumn, IDetailsListUpdateContent, Items } from '../../../types';
 
 interface PDetailsList {
    columns: IColumn[];
@@ -175,7 +175,7 @@ export const DetailsList: React.FC<PDetailsList | PDetailsListCheckBox> = (props
                               >
                                  {modifiedContent?.rowNum === i && modifiedContent.columnName === key ? (
                                     <>
-                                       {columns[j].editType !== EditType.Choice ? (
+                                       {columns[j].editType !== DetailsListEdit.Choice ? (
                                           <TextField
                                              defaultValue={changeTextField}
                                              style={{ height: '100%' }}

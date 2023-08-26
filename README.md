@@ -79,4 +79,7 @@
   + Added DetailsList all select Feature.
 + 2023-08-26
   + Clear Import and Folders
+  + Made Sentence Update Feature.
+  + Made ChatGPT Chat Feature.
+  + Installed React-spinners.
   

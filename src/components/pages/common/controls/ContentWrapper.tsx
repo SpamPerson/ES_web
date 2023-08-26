@@ -21,6 +21,7 @@ import { Login } from '../Login';
 import { SignUp } from '../SignUp';
 import { FindPassword } from '../FindPassword';
 import 'react-toastify/dist/ReactToastify.css';
+import { AiWrapper } from '../../ai/AiWrapper';
 
 interface IContentWrapper {
    children?: React.ReactNode;
@@ -81,11 +82,12 @@ export const ContentWrapper: React.FC<IContentWrapper> = (props) => {
                      <Route path="/changepassword" element={<ChangePasswordAuth />} />
                      <Route path="/word" element={<WordWrapper />} />
                      <Route path="/sentence" element={<SentenceWrapper />} />
+                     <Route path="/ai" element={<AiWrapper />} />
                   </>
                )}
             </Routes>
          </Stack>
-         <ToastContainer style={{zIndex:1000000000}}/>
+         <ToastContainer style={{ zIndex: 1000000000 }} />
       </Stack>
    );
 };

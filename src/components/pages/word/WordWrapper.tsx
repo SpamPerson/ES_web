@@ -8,7 +8,7 @@ import { AuthenticationContext } from '../../contexts/context';
 
 import { DetailsList } from '../common/controls/DetailsList';
 import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
-import { EditType, IColumn, IDetailsListUpdateContent, IWord, IWordCount, IWordUpdate, WordSearchColumn } from '../../types';
+import { DetailsListEdit, IColumn, IDetailsListUpdateContent, IWord, IWordCount, IWordUpdate, WordSearchColumn } from '../../types';
 import { deleteWords, getWordCount, getWordList, saveWord, updateWord } from '../../../services/word.request';
 import { Paging } from '../common/controls/Paging';
 import { PAGE_ITEM_COUNT } from '../../../constants/common.constants';
@@ -20,7 +20,7 @@ const columns: IColumn[] = [
       name: '단어',
       width: '20%',
       fieldName: 'enWord',
-      editType: EditType.TextField,
+      editType: DetailsListEdit.TextField,
       isInput: true,
       placeholder: '영단어를 입력해 주세요',
    },
@@ -29,18 +29,18 @@ const columns: IColumn[] = [
       name: '뜻',
       width: '20%',
       fieldName: 'krWord',
-      editType: EditType.TextField,
+      editType: DetailsListEdit.TextField,
       isInput: true,
       placeholder: '뜻을 입력해 주세요',
    },
    { key: 'createDate', name: '등록 일자', width: '10%', fieldName: 'createDate', isInput: false, fontSize: 15 },
-   { key: 'isMemorize', name: '암기 여부', width: '10%', fieldName: 'isMemorize', editType: EditType.Choice, isInput: false },
+   { key: 'isMemorize', name: '암기 여부', width: '10%', fieldName: 'isMemorize', editType: DetailsListEdit.Choice, isInput: false },
    {
       key: 'remarks',
       name: '비고',
       width: '30%',
       fieldName: 'remarks',
-      editType: EditType.TextField,
+      editType: DetailsListEdit.TextField,
       isInput: true,
       placeholder: '비고를 입력해 주세요',
    },

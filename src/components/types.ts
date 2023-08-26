@@ -55,7 +55,7 @@ export const enum MenuType {
    UserManager = 'userManager',
 }
 
-export const enum EditType {
+export const enum DetailsListEdit {
    TextField = 'textField',
    Calendar = 'calednar',
    Choice = 'choice',
@@ -73,12 +73,17 @@ export const enum SentenceSearchColumn {
    Remarks = 'remarks',
 }
 
+export const enum SentenceEditType {
+   Update = 'update',
+   Create = 'create',
+}
+
 export interface IColumn {
    key: string;
    name: string;
    width: string;
    fieldName?: string;
-   editType?: EditType;
+   editType?: DetailsListEdit;
    isInput?: boolean;
    placeholder?: string;
    fontSize?: number | string;
@@ -123,4 +128,14 @@ export interface IWordUpdate {
    wordCode: number;
    columnName: string;
    value: string;
+}
+
+export const enum MessageRoleType {
+   Assistant = "assistant",
+   User = "user"
+}
+
+export interface IAiMessage {
+   role: MessageRoleType
+   content: string;
 }

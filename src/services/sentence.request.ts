@@ -27,6 +27,14 @@ export const saveSentence = async (authentication: IAuthentication, sentence: IS
    }
 };
 
+export const updateSentence = async (authentication:IAuthentication, sentence:ISentence) => {
+   try {
+      return await httpPut('sentence', sentence, authentication);
+   } catch (err) {
+      throw err;
+   }
+}
+
 export const deleteSentence = async (authentication: IAuthentication, seletecSentences: ISentence[]) => {
    try {
       return await httpPut('sentence/list',seletecSentences, authentication);
