@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
+import { PageTitle, PrimaryButton, Stack, TextField } from '../../styled.components';
 import { IAiMessage, MessageRoleType } from '../../types';
 import { gptQuestion } from '../../../services/ai.request';
 import { AuthenticationContext } from '../../contexts/context';
@@ -17,6 +17,12 @@ export const AiWrapper: React.FC = () => {
 
    const contentInputRef = useRef<HTMLInputElement>(null);
    const chatBoxRef = useRef<HTMLDivElement>(null);
+
+   useEffect(()=>{
+    if(!isLoding){
+        contentInputRef.current?.focus();
+    }
+   },[isLoding])
 
    useEffect(() => {
       if (messages[messages.length - 1].role === MessageRoleType.User) {
