@@ -1,9 +1,12 @@
 import { useContext } from 'react';
-import { FiSettings, FiUser } from 'react-icons/fi';
-import { Stack, StackItem } from '../styled.components';
-import { IAuthenticationContext } from '../types';
-import { AuthenticationContext } from '../contexts/context';
 import { useNavigate } from 'react-router-dom';
+
+import { FiSettings, FiUser } from 'react-icons/fi';
+
+import { AuthenticationContext } from '../../../contexts/context';
+
+import { Stack, StackItem } from '../../../styled.components';
+import { IAuthenticationContext } from '../../../types';
 
 interface PUserProfile {
    closePanel?: () => void;

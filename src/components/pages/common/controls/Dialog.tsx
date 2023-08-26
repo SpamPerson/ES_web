@@ -1,5 +1,6 @@
-import { Stack } from '../styled.components';
 import { BsExclamationCircle } from 'react-icons/bs';
+
+import { Stack } from '../../../styled.components';
 
 interface PDialog {
    isOpen: boolean;

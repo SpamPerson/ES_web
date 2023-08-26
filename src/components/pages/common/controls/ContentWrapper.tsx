@@ -1,25 +1,26 @@
 import { useContext } from 'react';
-
+import { useRecoilState } from 'recoil';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+
 import { FiMenu } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 
-import { AuthenticationContext } from '../contexts/context';
-import { DisableWrapper, NavLoginLink, SidePanel, Stack, TopNavStack } from '../styled.components';
-import { IAuthentication, IAuthenticationContext } from '../types';
-import { useRecoilState } from 'recoil';
-import { isPenalOpenState } from '../../recoil/common.recoil';
+import { AuthenticationContext } from '../../../contexts/context';
+
+import { DisableWrapper, NavLoginLink, SidePanel, Stack, TopNavStack } from '../../../styled.components';
+import { IAuthentication, IAuthenticationContext } from '../../../types';
+import { isPenalOpenState } from '../../../../recoil/common.recoil';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { UserProfile } from './UserProfile';
 import { PanelMenu } from './PanelMenu';
-import { Home } from '../pages/Home';
-import { ChangePasswordAuth } from '../pages/ChangePasswordAuth';
-import { WordWrapper } from '../pages/WordWrapper';
-import { Login } from '../pages/Login';
-import { SignUp } from '../pages/SignUp';
-import { FindPassword } from '../pages/FindPassword';
-import { SentenceWrapper } from '../pages/SentenceWrapper';
+import { ChangePasswordAuth } from '../ChangePasswordAuth';
+import { WordWrapper } from '../../word/WordWrapper';
+import { SentenceWrapper } from '../../sentence/SentenceWrapper';
+import { Home } from '../Home';
+import { Login } from '../Login';
+import { SignUp } from '../SignUp';
+import { FindPassword } from '../FindPassword';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IContentWrapper {
    children?: React.ReactNode;

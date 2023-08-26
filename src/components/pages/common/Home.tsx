@@ -1,7 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { DefaultButton, Stack, StackItem } from '../styled.components';
 import { useContext } from 'react';
-import { AuthenticationContext } from '../contexts/context';
+import { useNavigate } from 'react-router-dom';
+
+import { AuthenticationContext } from '../../contexts/context';
+
+import { DefaultButton, Stack, StackItem } from '../../styled.components';
+
 
 export const Home: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);

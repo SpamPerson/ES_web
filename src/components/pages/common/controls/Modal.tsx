@@ -1,4 +1,4 @@
-import { Stack } from '../styled.components';
+import { Stack } from '../../../styled.components';
 
 interface PModal {
    isOpen: boolean;
@@ -9,7 +9,6 @@ interface PModal {
 }
 
 export const Modal: React.FC<PModal> = (props) => {
-
    const onkeyDownClose = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.code === 'Escape') props.onDismiss!();
    };
@@ -46,6 +45,11 @@ export const Modal: React.FC<PModal> = (props) => {
                   }}
                   onKeyDown={onkeyDownClose}
                >
+                  <Stack
+                     $verticalAlign="center"
+                     $horizontalAlign="end"
+                     style={{ height: 32, backgroundColor: 'rgb(52, 152, 219)', padding: '0 5px' }}
+                  ></Stack>
                   {props.children}
                </Stack>
             </>

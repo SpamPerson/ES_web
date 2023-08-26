@@ -9,7 +9,7 @@ import {
    setSessionStorageUserInfo,
 } from '../../../utils/common.utils';
 import { SESSION_STORAGE_ACCESS_TOKEN_KEY } from '../../../constants/common.constants';
-import { ContentWrapper } from '../../controls/ContentWrapper';
+import { ContentWrapper } from '../../pages/common/controls/ContentWrapper';
 import { useNavigate } from 'react-router-dom';
 
 

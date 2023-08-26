@@ -1,15 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
-import { DetailsList } from '../controls/DetailsList';
-import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../styled.components';
-import { EditType, IColumn, IDetailsListUpdateContent, IWord, IWordCount, IWordUpdate, WordSearchColumn } from '../types';
-import { deleteWords, getWordCount, getWordList, saveWord, updateWord } from '../../services/word.request';
-import { AuthenticationContext } from '../contexts/context';
-import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
-import { Paging } from '../controls/Paging';
-import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
 import { useNavigate } from 'react-router-dom';
+
 import dayjs from 'dayjs';
-import { errorNotification } from '../../utils/notification.utils';
+import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
+
+import { AuthenticationContext } from '../../contexts/context';
+
+import { DetailsList } from '../common/controls/DetailsList';
+import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
+import { EditType, IColumn, IDetailsListUpdateContent, IWord, IWordCount, IWordUpdate, WordSearchColumn } from '../../types';
+import { deleteWords, getWordCount, getWordList, saveWord, updateWord } from '../../../services/word.request';
+import { Paging } from '../common/controls/Paging';
+import { PAGE_ITEM_COUNT } from '../../../constants/common.constants';
+import { errorNotification } from '../../../utils/notification.utils';
 
 const columns: IColumn[] = [
    {

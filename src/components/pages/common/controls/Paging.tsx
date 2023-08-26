@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Stack } from '../styled.components';
+
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
+
+import { Stack } from '../../../styled.components';
+import { PAGE_ITEM_COUNT } from '../../../../constants/common.constants';
 
 interface PPaging {
    currentPageNum: number;

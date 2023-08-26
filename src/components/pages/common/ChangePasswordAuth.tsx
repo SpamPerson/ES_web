@@ -1,11 +1,14 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { LoginButton, Stack, StackItem, TextField } from '../styled.components';
-import { AuthenticationContext } from '../contexts/context';
 import { useNavigate } from 'react-router-dom';
-import { errorNotification, warningNotification } from '../../utils/notification.utils';
-import { changePassword, requestLogin } from '../../services/user.request';
-import { setRefreshToken } from '../../utils/common.utils';
+
 import dayjs from 'dayjs';
+
+import { AuthenticationContext } from '../../contexts/context';
+
+import { LoginButton, Stack, StackItem, TextField } from '../../styled.components';
+import { errorNotification, warningNotification } from '../../../utils/notification.utils';
+import { changePassword, requestLogin } from '../../../services/user.request';
+import { setRefreshToken } from '../../../utils/common.utils';
 
 export const ChangePasswordAuth: React.FC = () => {
    const { authentication, login } = useContext(AuthenticationContext);

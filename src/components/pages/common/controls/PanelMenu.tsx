@@ -1,10 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-import { Stack } from '../styled.components';
-import { TbNotebook, TbNotes, TbUserCog, TbZoomQuestion } from 'react-icons/tb';
-import { Styles } from 'styled-components/dist/types';
-import { IAuthenticationContext, MenuType, RoleName } from '../types';
-import { AuthenticationContext } from '../contexts/context';
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { TbNotebook, TbNotes, TbUserCog, TbZoomQuestion } from 'react-icons/tb';
+
+import { AuthenticationContext } from '../../../contexts/context';
+
+import { Styles } from 'styled-components/dist/types';
+import { Stack } from '../../../styled.components';
+import { IAuthenticationContext, MenuType, RoleName } from '../../../types';
 
 interface PPanelMenu {
    closePanel: () => void;

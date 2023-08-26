@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { PageTitle, PrimaryButton, Stack, TextField } from '../styled.components';
-import { successNotification, warningNotification } from '../../utils/notification.utils';
-import { checkUserId, checkUserMail, signUp } from '../../services/user.request';
 import { useNavigate } from 'react-router-dom';
+
+import { successNotification, warningNotification } from '../../../utils/notification.utils';
+import { checkUserId, checkUserMail, signUp } from '../../../services/user.request';
+import { PageTitle, PrimaryButton, Stack, TextField } from '../../styled.components';
 
 export const SignUp: React.FC = () => {
    const [userId, setUserId] = useState<string>('');

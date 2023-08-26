@@ -1,17 +1,20 @@
-import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
-import { TfiPencilAlt } from 'react-icons/tfi';
-import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField, Textarea } from '../styled.components';
-import { DetailsList } from '../controls/DetailsList';
-import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../types';
-import { Paging } from '../controls/Paging';
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { AuthenticationContext } from '../contexts/context';
-import { deleteSentence, getSentenceCount, getSentenceList, saveSentence } from '../../services/sentence.request';
-import { PAGE_ITEM_COUNT } from '../../constants/common.constants';
-import { Modal } from '../controls/Modal';
-import { Dialog } from '../controls/Dialog';
+
+import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import dayjs from 'dayjs';
-import { warningNotification } from '../../utils/notification.utils';
+import { TfiPencilAlt } from 'react-icons/tfi';
+
+import { AuthenticationContext } from '../../contexts/context';
+
+import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField, Textarea } from '../../styled.components';
+import { IColumn, ISentence, ISentenceCount, SentenceSearchColumn } from '../../types';
+import { deleteSentence, getSentenceCount, getSentenceList, saveSentence } from '../../../services/sentence.request';
+import { PAGE_ITEM_COUNT } from '../../../constants/common.constants';
+import { DetailsList } from '../common/controls/DetailsList';
+import { Paging } from '../common/controls/Paging';
+import { Modal } from '../common/controls/Modal';
+import { Dialog } from '../common/controls/Dialog';
+import { warningNotification } from '../../../utils/notification.utils';
 
 const columns: IColumn[] = [
    { key: 'enSentence', name: '영문장', fieldName: 'enSentence', width: '25%', fontSize: 15 },
@@ -132,7 +135,7 @@ export const SentenceWrapper: React.FC = () => {
       if (selectSentences.length === 1) {
       }
    };
-   console.log(enSentence);
+
    const onClickSaveSentence = async () => {
       const korReg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
       if (enSentence === '') {
@@ -278,11 +281,6 @@ export const SentenceWrapper: React.FC = () => {
          </Stack>
 
          <Modal isOpen={isSentenceAddModal} onDismiss={() => setIsSentenceAddModal(false)} width="50%" height="50%">
-            <Stack
-               $verticalAlign="center"
-               $horizontalAlign="end"
-               style={{ height: 32, backgroundColor: 'rgb(52, 152, 219)', padding: '0 5px' }}
-            ></Stack>
             <Stack
                $horizontalAlign="center"
                $verticalAlign="center"

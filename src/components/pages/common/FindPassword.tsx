@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { PageTitle, PrimaryButton, Stack, TextField } from '../styled.components';
-import { AuthenticationContext } from '../contexts/context';
 import { useNavigate } from 'react-router-dom';
-import { successNotification, warningNotification } from '../../utils/notification.utils';
-import { findPassword } from '../../services/user.request';
+
+import { AuthenticationContext } from '../../contexts/context';
+
+import { successNotification, warningNotification } from '../../../utils/notification.utils';
+import { findPassword } from '../../../services/user.request';
+import { PageTitle, PrimaryButton, Stack, TextField } from '../../styled.components';
+
 
 export const FindPassword: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);

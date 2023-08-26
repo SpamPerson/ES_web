@@ -1,7 +1,9 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { Stack, TextField } from '../styled.components';
-import { EditType, IColumn, IDetailsListUpdateContent, Items } from '../types';
+
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
+
+import { Stack, TextField } from '../../../styled.components';
+import { EditType, IColumn, IDetailsListUpdateContent, Items } from '../../../types';
 
 interface PDetailsList {
    columns: IColumn[];
