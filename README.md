@@ -77,4 +77,6 @@
   + Made Sentence Delete Feature.
   + Added Modal dismmiss Feature by Keyboard press.
   + Added DetailsList all select Feature.
++ 2023-08-26
+  + Clear Import and Folders
   
