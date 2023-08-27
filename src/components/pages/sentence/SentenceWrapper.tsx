@@ -53,6 +53,13 @@ export const SentenceWrapper: React.FC = () => {
       }
    }, [totalItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
+   useEffect(() => {
+      const startNum = PAGE_ITEM_COUNT * (currentPageNum - 1) + 1;
+      const endNum = PAGE_ITEM_COUNT * currentPageNum;
+      let newVisibleItems = totalItems.slice(startNum - 1, endNum);
+      setVisibleItems(newVisibleItems);
+   }, [currentPageNum]); // eslint-disable-line react-hooks/exhaustive-deps
+
    const getItems = async () => {
       const result = await getSentenceList(authentication!, searchColumn, searchText);
       if (result.isSuccess) {
@@ -221,8 +228,6 @@ export const SentenceWrapper: React.FC = () => {
                isCheckBox
                isIndex
             />
-         </Stack>
-         <Stack>
             <Paging currentPageNum={currentPageNum} totalItemsCount={totalItems.length} setCurrentPageNum={setCurrentPageNum} />
          </Stack>
          <SentenceEditor

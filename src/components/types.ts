@@ -20,6 +20,7 @@ export interface IUser {
    userId: string;
    password?: string;
    roles?: IRole[];
+   isDeleted?: string;
 }
 
 export interface IRole {
@@ -131,11 +132,11 @@ export interface IWordUpdate {
 }
 
 export const enum MessageRoleType {
-   Assistant = "assistant",
-   User = "user"
+   Assistant = 'assistant',
+   User = 'user',
 }
 
 export interface IAiMessage {
-   role: MessageRoleType
+   role: MessageRoleType;
    content: string;
 }

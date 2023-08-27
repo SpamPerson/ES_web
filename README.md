@@ -82,4 +82,10 @@
   + Made Sentence Update Feature.
   + Made ChatGPT Chat Feature.
   + Installed React-spinners.
++ 2023-08-27
+  + Made Admin page.
+  + Made User Active Feature.
+  + Made User Disable Feature.
+  + Made User Search Feature.
+  + Made Admin Page Pagenation.
   
