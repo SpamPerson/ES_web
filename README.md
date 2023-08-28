@@ -93,3 +93,5 @@
   + Fixed Word Get List Feature.
   + Added Word Delete Dialog Feature.
   + Fixed Sentence Get List Feature.
+
+# TEST
