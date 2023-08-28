@@ -120,8 +120,7 @@ export const httpPatch = async (url: string, data?: any, authentication?: IAuthe
       }
       return result;
    } catch (err) {
-      console.log(err);
-      throw err;
+      return { isSuccess: false, statusText: '' };
    }
 };
 

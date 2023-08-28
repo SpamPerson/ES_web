@@ -88,4 +88,10 @@
   + Made User Disable Feature.
   + Made User Search Feature.
   + Made Admin Page Pagenation.
++ 2023-08-28
+  + Clean Code.
+  + Fixed Word Get List Feature.
+  + Added Word Delete Dialog Feature.
+  
+  
   

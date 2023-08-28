@@ -1,11 +1,10 @@
 import { IAuthentication, IWord, IWordUpdate } from '../components/types';
 import { httpGet, httpPatch, httpPost, httpPut } from './common.request';
 
-export const getWordList = async (authentication: IAuthentication, searchText?: string, searchColumn?: string, orderBy?: string) => {
+export const getWordList = async (authentication: IAuthentication, searchText: string, searchColumn: string, currentPage:number) => {
    try {
-      const searchValue = searchText ? searchText : '@empty';
-      const orderByValue = orderBy ? orderBy : 'ASC';
-      return await httpGet(`word/list/${searchColumn}/${searchValue}/${orderByValue}`, authentication);
+
+      return await httpGet(`word/list/${searchColumn}/${currentPage}?searchText=${searchText}`, authentication);
    } catch (err) {
       throw err;
    }

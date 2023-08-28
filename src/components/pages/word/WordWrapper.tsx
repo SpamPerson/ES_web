@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
@@ -7,12 +6,13 @@ import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { AuthenticationContext } from '../../contexts/context';
 
 import { DetailsList } from '../common/controls/DetailsList';
-import { Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
+import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
 import { DetailsListEdit, IColumn, IDetailsListUpdateContent, IWord, IWordCount, IWordUpdate, WordSearchColumn } from '../../types';
 import { deleteWords, getWordCount, getWordList, saveWord, updateWord } from '../../../services/word.request';
 import { Paging } from '../common/controls/Paging';
 import { PAGE_ITEM_COUNT } from '../../../constants/common.constants';
 import { errorNotification } from '../../../utils/notification.utils';
+import { Dialog } from '../common/controls/Dialog';
 
 const columns: IColumn[] = [
    {
@@ -48,15 +48,15 @@ const columns: IColumn[] = [
 
 export const WordWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
-   const navigate = useNavigate();
-   const [totalWordItems, setTotalWordItems] = useState<IWord[]>([]);
-   const [visibleItems, setVisibleItems] = useState<IWord[]>([]);
+   const [wordItems, setWordItems] = useState<IWord[]>([]);
    const [isAddRow, setIsAddRow] = useState<boolean>(false);
    const [searchColumn, setSearchColumn] = useState<WordSearchColumn>(WordSearchColumn.EnWord);
-   const [searchText, setSearchText] = useState<string>('');
    const [currentPageNum, setCurrentPageNum] = useState<number>(1);
+   const [totalPage, setTotalPage] = useState<number>(1);
+   const [searchText, setSearchText] = useState<string>('');
    const [selectItems, setSelectItems] = useState<IWord[]>([]);
    const [wordCount, setWordCount] = useState<IWordCount>();
+   const [isDeleteDialog, setIsDeleteDialog] = useState<boolean>(false);
 
    useEffect(() => {
       getWordItems();
@@ -64,31 +64,18 @@ export const WordWrapper: React.FC = () => {
    }, [authentication]); // eslint-disable-line react-hooks/exhaustive-deps
 
    useEffect(() => {
-      if (totalWordItems.length > 0) {
-         let newVisibleItems = totalWordItems.slice(0, PAGE_ITEM_COUNT * currentPageNum);
-         setVisibleItems(newVisibleItems);
-      } else {
-         setVisibleItems([]);
-         setCurrentPageNum(1);
-      }
-      getCount();
-   }, [totalWordItems]); // eslint-disable-line react-hooks/exhaustive-deps
-
-   useEffect(() => {
-      const startNum = PAGE_ITEM_COUNT * (currentPageNum - 1) + 1;
-      const endNum = PAGE_ITEM_COUNT * currentPageNum;
-      let newVisibleItems = totalWordItems.slice(startNum - 1, endNum);
-      setVisibleItems(newVisibleItems);
+      getWordItems();
    }, [currentPageNum]); // eslint-disable-line react-hooks/exhaustive-deps
 
+   useEffect(() => {
+      getCount();
+   }, [wordItems]); // eslint-disable-line react-hooks/exhaustive-deps
+
    const getWordItems = async () => {
-      if (authentication) {
-         const itemsResult = await getWordList(authentication, searchText, searchColumn);
-         if (itemsResult.isSuccess) {
-            setTotalWordItems(itemsResult.data);
-         }
-      } else {
-         navigate('/login');
+      const itemsResult = await getWordList(authentication!, searchText, searchColumn, currentPageNum);
+      if (itemsResult.isSuccess) {
+         setWordItems(itemsResult.data.words);
+         setTotalPage(itemsResult.data.totalPage);
       }
    };
 
@@ -112,8 +99,8 @@ export const WordWrapper: React.FC = () => {
    };
 
    const onChangeValue = async (info: IDetailsListUpdateContent, value: string) => {
-      let newItems: IWord[] = [...visibleItems];
-      let wordCode = visibleItems[info.rowNum].wordCode;
+      let newItems: IWord[] = [...wordItems];
+      let wordCode = wordItems[info.rowNum].wordCode;
       let changeWord: IWordUpdate = { columnName: info.columnName, wordCode: wordCode!, value: value };
       const result = await updateWord(authentication!, changeWord);
       if (result.isSuccess) {
@@ -122,9 +109,11 @@ export const WordWrapper: React.FC = () => {
             1,
             result.data
          );
+      } else {
+         errorNotification('단어가 중복 이거나, 단어를 수정하는데 실패하였습니다.');
       }
       getCount();
-      setVisibleItems(newItems);
+      setWordItems(newItems);
    };
 
    const onClickAdd = () => {
@@ -140,9 +129,7 @@ export const WordWrapper: React.FC = () => {
       };
       const response = await saveWord(authentication!, newAddWord);
       if (response.isSuccess) {
-         let newTotalItems: IWord[] = [...totalWordItems];
-         newTotalItems.push(response.data);
-         setTotalWordItems(newTotalItems);
+         getWordItems();
          setIsAddRow(false);
       } else {
          errorNotification('단어가 중복 이거나, 단어를 저장하는데 실패하였습니다.');
@@ -161,18 +148,11 @@ export const WordWrapper: React.FC = () => {
    };
 
    const onClickDelete = async () => {
-      if (selectItems.length > 0) {
-         let newItems: IWord[] = [...totalWordItems];
-         const result = await deleteWords(authentication!, selectItems);
-         if (result.isSuccess) {
-            selectItems.forEach((item) => {
-               newItems = newItems.filter((element) => element.wordCode !== item.wordCode);
-            });
-            setSelectItems([]);
-            setTotalWordItems(newItems);
-            getCount();
-         }
+      const result = await deleteWords(authentication!, selectItems);
+      if (result.isSuccess) {
+         getWordItems();
       }
+      setIsDeleteDialog(false);
    };
 
    return (
@@ -184,11 +164,11 @@ export const WordWrapper: React.FC = () => {
             <Stack $horizontalAlign="end" style={{ padding: '5px 40px' }}>
                <Stack $horizontal $childrenGap={5} style={{ padding: '0 5px' }}>
                   <span>등록 단어 :</span>
-                  {wordCount?.totalWord}
+                  {wordCount?.totalWord ? wordCount?.totalWord : 0}
                </Stack>
                <Stack $horizontal $childrenGap={5} style={{ padding: '0 5px' }}>
                   <span>암기 단어 :</span>
-                  {wordCount?.memorizeWord}
+                  {wordCount?.memorizeWord ? wordCount?.memorizeWord : 0}
                </Stack>
             </Stack>
             <Stack $horizontal $horizontalAlign="space-between" $verticalAlign="center" style={{ padding: '0 40px' }}>
@@ -212,7 +192,11 @@ export const WordWrapper: React.FC = () => {
                      $horizontal
                      $verticalAlign="center"
                      $childrenGap={5}
-                     onClick={onClickDelete}
+                     onClick={() => {
+                        if (selectItems.length > 0) {
+                           setIsDeleteDialog(true);
+                        }
+                     }}
                      style={{ cursor: 'pointer', userSelect: 'none', color: selectItems.length === 0 ? '#e0e0e0' : undefined }}
                      $styles={{
                         '&:hover': {
@@ -246,7 +230,7 @@ export const WordWrapper: React.FC = () => {
             <Stack>
                <DetailsList
                   columns={columns}
-                  items={visibleItems}
+                  items={wordItems}
                   selection={onSelection}
                   selectedItems={selectItems}
                   onChangeValue={onChangeValue}
@@ -255,7 +239,7 @@ export const WordWrapper: React.FC = () => {
                   setAddItem={setAddItem}
                   setAllCheck={(isAllCheck) => {
                      if (isAllCheck) {
-                        setSelectItems(visibleItems);
+                        setSelectItems(wordItems);
                      } else {
                         setSelectItems([]);
                      }
@@ -264,10 +248,16 @@ export const WordWrapper: React.FC = () => {
                   isCheckBox
                   isIndex
                />
+               <Paging
+                  currentPageNum={currentPageNum}
+                  totalItemsCount={totalPage * PAGE_ITEM_COUNT}
+                  setCurrentPageNum={setCurrentPageNum}
+               />
             </Stack>
-            <Stack>
-               <Paging currentPageNum={currentPageNum} totalItemsCount={totalWordItems.length} setCurrentPageNum={setCurrentPageNum} />
-            </Stack>
+            <Dialog isOpen={isDeleteDialog} title="단어 삭제" subText="선택된 단어들을 삭제하시겠습니까?">
+               <PrimaryButton onClick={onClickDelete}>삭제</PrimaryButton>
+               <DefaultButton onClick={() => setIsDeleteDialog(false)}>취소</DefaultButton>
+            </Dialog>
          </>
       </Stack>
    );
