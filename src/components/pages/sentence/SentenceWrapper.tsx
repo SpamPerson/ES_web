@@ -1,20 +1,17 @@
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { FiPlusCircle, FiTrash2 } from 'react-icons/fi';
-import dayjs from 'dayjs';
 import { TfiPencilAlt } from 'react-icons/tfi';
 
 import { AuthenticationContext } from '../../contexts/context';
 
-import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField, Textarea } from '../../styled.components';
+import { DefaultButton, Dropdown, PageTitle, PrimaryButton, Stack, StackItem, TextField } from '../../styled.components';
 import { DetailsList } from '../common/controls/DetailsList';
 import { IColumn, ISentence, ISentenceCount, SentenceEditType, SentenceSearchColumn } from '../../types';
-import { deleteSentence, getSentenceCount, getSentenceList, saveSentence } from '../../../services/sentence.request';
+import { deleteSentence, getSentenceCount, getSentenceList } from '../../../services/sentence.request';
 import { Paging } from '../common/controls/Paging';
 import { PAGE_ITEM_COUNT } from '../../../constants/common.constants';
-import { Modal } from '../common/controls/Modal';
 import { Dialog } from '../common/controls/Dialog';
-import { warningNotification } from '../../../utils/notification.utils';
 import { SentenceEditor } from './controls/SentenceEditor';
 
 const columns: IColumn[] = [
@@ -28,11 +25,14 @@ const columns: IColumn[] = [
 export const SentenceWrapper: React.FC = () => {
    const { authentication } = useContext(AuthenticationContext);
    const [currentPageNum, setCurrentPageNum] = useState<number>(1);
-   const [totalItems, setTotalItems] = useState<ISentence[]>([]);
-   const [visibleItems, setVisibleItems] = useState<ISentence[]>([]);
+
+   const [sentenceItems, setSentenceItems] = useState<ISentence[]>([]);
+   const [totalPage, setTotalPage] = useState<number>(1);
+
    const [searchColumn, setSearchColumn] = useState<SentenceSearchColumn>(SentenceSearchColumn.EnSentence);
    const [searchText, setSearchText] = useState<string>('');
    const [selectSentences, setSelectSentences] = useState<ISentence[]>([]);
+
    const [sentenceCount, setSentenceCount] = useState<ISentenceCount>();
    const [isSentenceAddModal, setIsSentenceAddModal] = useState<boolean>(false);
    const [isOpenDeleteDialog, setIsDeleteDialog] = useState<boolean>(false);
@@ -44,26 +44,14 @@ export const SentenceWrapper: React.FC = () => {
    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
    useEffect(() => {
-      if (totalItems.length > 0) {
-         let newVisibleItems = totalItems.slice(0, PAGE_ITEM_COUNT * currentPageNum);
-         setVisibleItems(newVisibleItems);
-      } else {
-         setVisibleItems([]);
-         setCurrentPageNum(1);
-      }
-   }, [totalItems]); // eslint-disable-line react-hooks/exhaustive-deps
-
-   useEffect(() => {
-      const startNum = PAGE_ITEM_COUNT * (currentPageNum - 1) + 1;
-      const endNum = PAGE_ITEM_COUNT * currentPageNum;
-      let newVisibleItems = totalItems.slice(startNum - 1, endNum);
-      setVisibleItems(newVisibleItems);
+      getItems();
    }, [currentPageNum]); // eslint-disable-line react-hooks/exhaustive-deps
 
    const getItems = async () => {
-      const result = await getSentenceList(authentication!, searchColumn, searchText);
+      const result = await getSentenceList(authentication!, searchColumn, searchText, currentPageNum);
       if (result.isSuccess) {
-         setTotalItems(result.data);
+         setSentenceItems(result.data.sentences);
+         setTotalPage(result.data.totalPage);
       }
    };
 
@@ -99,13 +87,9 @@ export const SentenceWrapper: React.FC = () => {
 
    const onClickDelete = async () => {
       if (selectSentences.length > 0) {
-         let newTotalItems: ISentence[] = [...totalItems];
          const result = await deleteSentence(authentication!, selectSentences);
          if (result.isSuccess) {
-            selectSentences.forEach((sentence) => {
-               newTotalItems = newTotalItems.filter((element) => element.sentenceCode !== sentence.sentenceCode);
-            });
-            setTotalItems(newTotalItems);
+            getItems();
             setIsDeleteDialog(false);
          }
          setSelectSentences([]);
@@ -119,17 +103,18 @@ export const SentenceWrapper: React.FC = () => {
    };
 
    const onSaveSentence = (sentence: ISentence, type: SentenceEditType) => {
-      let newTotalItems: ISentence[] = [...totalItems];
+      let newSentenceItems: ISentence[] = [...sentenceItems];
       switch (type) {
          case SentenceEditType.Create:
-            newTotalItems.push(sentence);
+            getItems();
             break;
          case SentenceEditType.Update:
-            const index = newTotalItems.findIndex((element) => element.sentenceCode === sentence.sentenceCode);
-            newTotalItems.splice(index, 1, sentence);
+            const index = newSentenceItems.findIndex((element) => element.sentenceCode === sentence.sentenceCode);
+            newSentenceItems.splice(index, 1, sentence);
+            setSentenceItems(newSentenceItems);
+            setSelectSentences([]);
             break;
       }
-      setTotalItems(newTotalItems);
    };
 
    return (
@@ -214,12 +199,12 @@ export const SentenceWrapper: React.FC = () => {
          <Stack>
             <DetailsList
                columns={columns}
-               items={visibleItems}
+               items={sentenceItems}
                selection={onSelection}
                selectedItems={selectSentences}
                setAllCheck={(isAllCheck) => {
                   if (isAllCheck) {
-                     setSelectSentences(visibleItems);
+                     setSelectSentences(sentenceItems);
                   } else {
                      setSelectSentences([]);
                   }
@@ -228,7 +213,7 @@ export const SentenceWrapper: React.FC = () => {
                isCheckBox
                isIndex
             />
-            <Paging currentPageNum={currentPageNum} totalItemsCount={totalItems.length} setCurrentPageNum={setCurrentPageNum} />
+            <Paging currentPageNum={currentPageNum} totalItemsCount={totalPage * PAGE_ITEM_COUNT} setCurrentPageNum={setCurrentPageNum} />
          </Stack>
          <SentenceEditor
             type={SentenceEditType.Create}
