@@ -81,7 +81,6 @@ export const SentenceWrapper: React.FC = () => {
       } else {
          newSelectItems.push(sentence);
       }
-      if (sentence.sentenceCode === -1) console.log(sentence);
       setSelectSentences(newSelectItems);
    };
 
