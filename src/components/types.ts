@@ -1,5 +1,45 @@
 export type Items = Array<{ [key: string]: any }>;
 
+export const enum MessageRoleType {
+   Assistant = 'assistant',
+   User = 'user',
+}
+
+export const enum RoleName {
+   Admin = 'ROLE_ADMIN',
+   User = 'ROLE_USER',
+}
+
+export const enum MenuType {
+   Word = 'word',
+   Sentence = 'sentence',
+   Ai = 'ai',
+   UserManager = 'admin',
+}
+
+export const enum DetailsListEdit {
+   TextField = 'textField',
+   Calendar = 'calednar',
+   Choice = 'choice',
+}
+
+export const enum WordSearchColumn {
+   EnWord = 'enWord',
+   KrWord = 'krWord',
+   Remarks = 'remarks',
+}
+
+export const enum SentenceSearchColumn {
+   EnSentence = 'enSentence',
+   KrSentence = 'krSentence',
+   Remarks = 'remarks',
+}
+
+export const enum SentenceEditType {
+   Update = 'update',
+   Create = 'create',
+}
+
 export interface IAuthenticationContext {
    authentication?: IAuthentication;
    setAuthentication?: (authentication: IAuthentication) => void;
@@ -42,41 +82,6 @@ export interface ApiResult {
    data?: any;
    status?: number;
    statusText: string;
-}
-
-export const enum RoleName {
-   Admin = 'ROLE_ADMIN',
-   User = 'ROLE_USER',
-}
-
-export const enum MenuType {
-   Word = 'word',
-   Sentence = 'sentence',
-   Ai = 'ai',
-   UserManager = 'admin',
-}
-
-export const enum DetailsListEdit {
-   TextField = 'textField',
-   Calendar = 'calednar',
-   Choice = 'choice',
-}
-
-export const enum WordSearchColumn {
-   EnWord = 'enWord',
-   KrWord = 'krWord',
-   Remarks = 'remarks',
-}
-
-export const enum SentenceSearchColumn {
-   EnSentence = 'enSentence',
-   KrSentence = 'krSentence',
-   Remarks = 'remarks',
-}
-
-export const enum SentenceEditType {
-   Update = 'update',
-   Create = 'create',
 }
 
 export interface IColumn {
@@ -129,11 +134,6 @@ export interface IWordUpdate {
    wordCode: number;
    columnName: string;
    value: string;
-}
-
-export const enum MessageRoleType {
-   Assistant = 'assistant',
-   User = 'user',
 }
 
 export interface IAiMessage {
