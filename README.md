@@ -1,6 +1,7 @@
 # Project Intro
 1. Document: https://github.com/SpamPerson/ES_Documents
 2. Api: https://github.com/SpamPerson/ES_api
+3. Release: https://spamperson.co.kr
 
 # Web Application Info
 1. react 18 with typescript.
@@ -95,5 +96,3 @@
   + Fixed Sentence Get List Feature.
 + 2023-08-29
   + Released using a test (https://spamperson.co.kr)
-
-# TEST
