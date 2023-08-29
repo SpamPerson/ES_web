@@ -93,5 +93,7 @@
   + Fixed Word Get List Feature.
   + Added Word Delete Dialog Feature.
   + Fixed Sentence Get List Feature.
++ 2023-08-29
+  + Released using a test (https://spamperson.co.kr)
 
 # TEST
